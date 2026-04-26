@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+
+  db:
+    image: 'postgres:latest'
+    container_name: postgres-benjaminc
+    build:
+      context: ./postgres
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=demo01
+    
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+  
+  backendbc:
+    image: benjacv/backendbc:latest
+    container_name: backendbc
+    build:
+      context: ./Test01/Test01
+    
+    ports:
+      - "6789:6789"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/bus
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=1234
+    depends_on:
+      - db
+
+  frontendbc:
+    image: benjacv/frontendbc:latest
+    container_name: frontendbc
+    build:
+      context: ./test02 
+    ports:
+      - "9876:9876"
+    depends_on:
+      - db
+
+volumes:
+  pg-data:

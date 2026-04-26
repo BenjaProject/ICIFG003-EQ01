@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mantenedor BUS API REST</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Mantenedor Buses</h1>
+        <a th:href="@{/crud/bus/nuevo}" class="btn btn-primary">Nuevo Bus</a>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>PATENTE</th>
+                <th>MARCA</th>
+                <th>KM</th>
+                <th>AÑO</th>
+                <th>COMBUSTIBLE</th>
+                <th>REVISION AL DIA</th>
+
+                <th style="width: 200px;">ACCIONES</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="b : ${buses}">
+                <td th:text="${b.patente}"></td>
+                <td th:text="${b.marca}"></td>
+                <td th:text="${b.km}"></td>
+                <td th:text="${b.anio}"></td>
+                <td th:text="${b.combustible}"></td>
+                <td th:text="${b.revisionAlDia}"></td>
+                <td>
+                    <a class="btn btn-warning btn-sm" th:href="@{/crud/bus/{id}(id=${b.id})}">Editar</a>
+                    
+                    <a class="btn btn-danger btn-sm" 
+                       th:href="@{/crud/bus/eliminar/{id}(id=${b.id})}"
+                       onclick="return confirm('¿Estás seguro de eliminar a esta persona?')">Borrar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Estudiantes</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body class="container mt-5">
+
+    <div class="card">
+        <div class="card-header">
+            <h2 th:text="${estudiante.id == null} ? 'Nuevo Estudiante' : 'Editar Estudiante'"></h2>
+        </div>
+        <div class="card-body">
+            <form th:action="${estudiante.id == null} ? @{/crud/estudiantes/guardar} : @{/crud/estudiantes/actualizar/{id}(id=${estudiante.id})}" 
+                  th:object="${estudiante}" method="post">
+                
+                <input type="hidden" th:field="*{id}">
+
+                <div class="form-group">
+                    <label for="nombre">Nombre Completo:</label>
+                    <input type="text" th:field="*{nombre}" class="form-control" id="nombre" required placeholder="Ej: Benjamín Aedo">
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-success" th:text="${persona.id == null} ? 'Guardar' : 'Actualizar'"></button>
+                    <a th:href="@{/crud/estudiantes}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

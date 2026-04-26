@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mantenedor Persona API REST</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Mantenedor Personas</h1>
+        <a th:href="@{/crud/personas/nuevo}" class="btn btn-primary">Nueva Persona</a>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>NOMBRE</th>
+                <th style="width: 200px;">ACCIONES</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="p : ${personas}">
+                <td th:text="${p.nombre}"></td>
+                <td>
+                    <a class="btn btn-warning btn-sm" th:href="@{/crud/personas/{id}/editar(id=${p.id})}">Editar</a>
+                    
+                    <a class="btn btn-danger btn-sm" 
+                       th:href="@{/crud/personas/eliminar/{id}(id=${p.id})}"
+                       onclick="return confirm('¿Estás seguro de eliminar a esta persona?')">Borrar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

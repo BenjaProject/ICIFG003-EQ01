@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Persona</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body class="container mt-5">
+
+    <div class="card">
+        <div class="card-header">
+            <h2 th:text="${bus.id == null} ? 'Nuevo Bus' : 'Editar Bus'"></h2>
+        </div>
+        <div class="card-body">
+            <form th:action="${bus.id == null} ? @{/crud/bus/guardar} : @{/crud/bus/actualizar/{id}(id=${bus.id})}" 
+                  th:object="${bus}" method="post">
+                
+                <input type="hidden" th:field="*{id}">
+
+                <div class="form-group">
+                    <label for="nombre">Patente:</label>
+                    <input type="text" th:field="*{patente}" class="form-control" id="patente" required placeholder="Ingrese Patente">
+                </div>
+                <div class="form-group">
+                    <label for="nombre">Marca:</label>
+                    <input type="text" th:field="*{marca}" class="form-control" id="marca" required placeholder="Ingrese Marca">
+                </div>
+                <div class="form-group">
+                    <label for="nombre">Km:</label>
+                    <input type="number" th:field="*{km}" class="form-control" id="km" required placeholder="Ingrese KM" default="0">
+                </div>
+                <div class="form-group">
+                    <label for="nombre">Año:</label>
+                    <input type="number" th:field="*{anio}" class="form-control" id="anio" required placeholder="Ingrese Año">
+                </div>
+                <div class="form-group">
+                    <label for="nombre">Combustible:</label>
+                    <input type="text" th:field="*{combustible}" class="form-control" id="combustible" maxlength="1" required placeholder="Ej: A, B">
+                </div>
+                <div class="form-group">
+                    <label for="nombre">¿Tiene la revisión al dia?</label>
+                    <select th:field="*{revisionAlDia}" class="form-control" id="tieneRevision" required>
+                        <option value="true">Sí</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-success" th:text="${bus.id == null} ? 'Guardar' : 'Actualizar'"></button>
+                    <a th:href="@{/crud/bus}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
