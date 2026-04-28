@@ -20,6 +20,12 @@ public class EstudianteEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nombre;
+	private String apellidoPaterno;
+	private String apellidoMaterno;
+	private Long run;
+	private String curso;
+	private int cantidadAtrasos;
+	private int cantidadInasistencias;
 	
 
 }

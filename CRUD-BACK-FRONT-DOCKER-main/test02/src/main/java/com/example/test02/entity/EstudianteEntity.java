@@ -12,4 +12,10 @@ import lombok.NoArgsConstructor;
 public class EstudianteEntity {
     private Long id;
     private String nombre;
+    private String apellidoPaterno;
+    private String apellidoMaterno;
+    private String run;
+    private String curso;
+    private String cantidadAtrasos;
+    private String cantidadInasistencias;
 }

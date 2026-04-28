@@ -56,6 +56,12 @@ public class EstudianteController {
 				return ResponseEntity.status(404).body("Estudiante no encontrado");
 			}
 			existingEstudiante.setNombre(estudiante.getNombre());
+			existingEstudiante.setApellidoPaterno(estudiante.getApellidoPaterno());
+			existingEstudiante.setApellidoMaterno(estudiante.getApellidoMaterno());
+			existingEstudiante.setRun(estudiante.getRun());
+			existingEstudiante.setCurso(estudiante.getCurso());
+			existingEstudiante.setCantidadAtrasos(estudiante.getCantidadAtrasos());
+			existingEstudiante.setCantidadInasistencias(estudiante.getCantidadInasistencias());
 			return ResponseEntity.ok(estudianteService.save(existingEstudiante));
 		} catch (Exception e) {
 			return ResponseEntity.status(404).body(e);
@@ -70,7 +76,7 @@ public class EstudianteController {
 				return ResponseEntity.status(404).body("Estudiante no encontrado");
 			}
 			estudianteService.deleteById(id);
-			return ResponseEntity.ok("Estudiante eliminada exitosamente");
+			return ResponseEntity.ok("Estudiante eliminado exitosamente");
 		} catch (Exception e) {
 			return ResponseEntity.status(404).body(e);
 		}
