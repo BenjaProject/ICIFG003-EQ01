@@ -1,4 +1,7 @@
  :host{
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
             font-family: 'Lexend', sans-serif;
             color: #191c1d;
             background-color: #f8f9fa;
@@ -7,6 +10,11 @@
         h1,
         h2,
         h3,
+
+        main {
+            flex: 1;
+        }
+
         .navbar-brand {
             font-family: 'Public Sans', sans-serif;
             font-weight: 700;
@@ -151,6 +159,6 @@
         footer {
             background-color: var(--navy-dark);
             border-top: 4px solid var(--bs-secondary);
-            padding: 3rem 0;
+            padding: 2rem 0;
             color: #cbd5e1;
         }
