@@ -1,19 +1,35 @@
 <main>
     <div class=" container py-5 d-flex flex-column align-items-center gap-4">
         <span class="ls-wide text-uppercase" style="letter-spacing: 0.1em;">Login</span>
-        <div class="card-body p-4">
-          <form>
+                <div class="card-body p-4">
+                    <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <div class="mb-3">
               <label for="user" class="form-label text-navy fw-bold">Usuario</label>
-              <input type="text" class="form-control" id="user" placeholder="Ej: rut o correo">
+                            <input type="text" class="form-control" id="user" formControlName="username" placeholder="Ej: rut o correo" autocomplete="username">
             </div>
             
             <div class="mb-3">
               <label for="pass" class="form-label text-navy fw-bold">Contraseña</label>
-              <input type="password" class="form-control" id="pass">
+                            <input type="password" class="form-control" id="pass" formControlName="password" autocomplete="current-password">
             </div>
 
-            <button type="submit" class="btn btn-yellow w-100 py-2">Ingresar</button>
+                                                <button type="submit" class="btn btn-yellow w-100 py-2">Ingresar</button>
+
+                                                @if (usuarioStore.loading()) {
+                                                    <p class="mt-3 mb-0 text-center text-secondary">Validando...</p>
+                                                }
+
+                                                @if (usuarioStore.isValid() === true) {
+                                                    <p class="mt-3 mb-0 text-center text-success">Usuario valido</p>
+                                                }
+
+                                                @if (usuarioStore.isValid() === false) {
+                                                    <p class="mt-3 mb-0 text-center text-danger">Usuario invalido</p>
+                                                }
+
+                                                @if (usuarioStore.error()) {
+                                                    <p class="mt-3 mb-0 text-center text-danger">{{ usuarioStore.error() }}</p>
+                                                }
           </form>
         </div>
 
