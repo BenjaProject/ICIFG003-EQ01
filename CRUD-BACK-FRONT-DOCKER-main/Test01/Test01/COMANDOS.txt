@@ -1,2 +1,0 @@
-Comando para crear la base de datos:
-createdb -U postgres bus
