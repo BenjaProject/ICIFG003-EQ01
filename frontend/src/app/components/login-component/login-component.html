@@ -1,5 +1,10 @@
 <main>
-    <div class=" container py-5 d-flex flex-column align-items-center gap-4">
+    <div class="container mt-4 ">
+        <a class="btn btn-primary" routerLink="/">Volver</a>
+    </div>
+    <div class=" card shadow mt-4 container py-5 d-flex flex-column align-items-center gap-4">
+        <div class="card shadow-sm" style="max-width: 400px; width: 100%;">
+            <div class="card-header bg-navy text-white text-center">
         <span class="ls-wide text-uppercase" style="letter-spacing: 0.1em;">
             @if (isRegister()) {
             Registro
@@ -7,6 +12,8 @@
             Login
             }
         </span>
+            </div>
+        </div>
         <div class="card-body p-4">
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
                 <div class="mb-3">

@@ -54,6 +54,11 @@
 	color: var(--bs-secondary) !important;
 	border-bottom: 2px solid var(--bs-secondary);
 }
+.nav-link:hover {
+    color: var(--bs-secondary) !important;
+    border-bottom: 2px solid var(--bs-secondary);
+    transition: all 0.3s ease; 
+}
 
 .program-card {
 	border: 1px solid #e1e3e4;
@@ -98,6 +103,17 @@
 .material-symbols-outlined {
 	vertical-align: middle;
 }
+        .github-link svg {
+            color: #ffffff;
+            transition: transform 0.3s ease, color 0.3s ease;
+            opacity: 0.8;
+        }
+
+        .github-link:hover svg {
+            transform: scale(1.1);
+            opacity: 1;
+            color: #4078c0;
+        }
 
 footer {
 	background-color: var(--navy-dark);
