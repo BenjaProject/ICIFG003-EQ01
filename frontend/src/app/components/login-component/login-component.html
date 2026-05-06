@@ -1,36 +1,55 @@
 <main>
     <div class=" container py-5 d-flex flex-column align-items-center gap-4">
-        <span class="ls-wide text-uppercase" style="letter-spacing: 0.1em;">Login</span>
-                <div class="card-body p-4">
-                    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <div class="mb-3">
-              <label for="user" class="form-label text-navy fw-bold">Usuario</label>
-                            <input type="text" class="form-control" id="user" formControlName="username" placeholder="Ej: rut o correo" autocomplete="username">
-            </div>
-            
-            <div class="mb-3">
-              <label for="pass" class="form-label text-navy fw-bold">Contraseña</label>
-                            <input type="password" class="form-control" id="pass" formControlName="password" autocomplete="current-password">
-            </div>
+        <span class="ls-wide text-uppercase" style="letter-spacing: 0.1em;">
+            @if (isRegister()) {
+            Registro
+            } @else {
+            Login
+            }
+        </span>
+        <div class="card-body p-4">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <div class="mb-3">
+                    <label for="user" class="form-label text-navy fw-bold">Usuario</label>
+                    <input type="text" class="form-control" id="user" formControlName="username"
+                        placeholder="Ingrese Usuario" autocomplete="username">
+                </div>
 
-                                                <button type="submit" class="btn btn-yellow w-100 py-2">Ingresar</button>
+                <div class="mb-3">
+                    <label for="pass" class="form-label text-navy fw-bold">Contraseña</label>
+                    <input type="password" class="form-control" id="pass" formControlName="password"
+                        autocomplete="current-password">
+                </div>
 
-                                                @if (usuarioStore.loading()) {
-                                                    <p class="mt-3 mb-0 text-center text-secondary">Validando...</p>
-                                                }
+                <div class="d-grid gap-2">
+                    @if (isRegister()) {
+                    <button type="submit" class="btn btn-yellow py-2">Registrarse</button>
+                    } @else {
+                    <button type="submit" class="btn btn-yellow py-2">Ingresar</button>
+                    <a class="btn btn-outline-secondary py-2" routerLink="/registro">Registrarse</a>
+                    }
+                </div>
 
-                                                @if (usuarioStore.isValid() === true) {
-                                                    <p class="mt-3 mb-0 text-center text-success">Usuario valido</p>
-                                                }
+                @if (!isRegister() && authError()) {
+                <p class="mt-3 mb-0 text-center text-danger">{{ authError() }}</p>
+                }
 
-                                                @if (usuarioStore.isValid() === false) {
-                                                    <p class="mt-3 mb-0 text-center text-danger">Usuario invalido</p>
-                                                }
+                @if (!isRegister() && usuarioStore.loading()) {
+                <p class="mt-3 mb-0 text-center text-secondary">Validando...</p>
+                }
 
-                                                @if (usuarioStore.error()) {
-                                                    <p class="mt-3 mb-0 text-center text-danger">{{ usuarioStore.error() }}</p>
-                                                }
-          </form>
+                @if (!isRegister() && usuarioStore.isValid() === true) {
+                <p class="mt-3 mb-0 text-center text-success">Usuario valido</p>
+                }
+
+                @if (!isRegister() && usuarioStore.isValid() === false) {
+                <p class="mt-3 mb-0 text-center text-danger">Usuario invalido</p>
+                }
+
+                @if (!isRegister() && usuarioStore.error()) {
+                <p class="mt-3 mb-0 text-center text-danger">{{ usuarioStore.error() }}</p>
+                }
+            </form>
         </div>
 
     </div>

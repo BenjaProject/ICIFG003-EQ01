@@ -1,1 +1,79 @@
-<p>dashboard-component works!</p>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+                <span class="material-symbols-outlined text-yellow" data-icon="school">school</span>
+                <span class="text-uppercase fw-semibold" style="letter-spacing: 0.1em;">Institutional Portal</span>
+            </a>
+            <button class="navbar-toggler" data-bs-target="#navbarDashboard" data-bs-toggle="collapse" type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarDashboard">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Menú Principal</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    @if (usuarioStore.isValid()) {
+                        <span class="text-white fw-semibold">Hola, {{ usuarioStore.username() || 'Usuario' }}</span>
+                        <button type="button" class="btn btn-outline-light btn-sm" (click)="logout()">Cerrar sesion</button>
+                    } @else {
+                        <a routerLink="/login" class="btn btn-yellow px-4 py-2">Login</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="py-5 bg-light">
+    <div class="container">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a class="text-navy" href="#">Home</a></li>
+                <li class="breadcrumb-item active text-navy" aria-current="page">Portal Menu</li>
+            </ol>
+        </nav>
+
+        <section class="bg-white border-start border-4 border-warning p-4 p-md-5 shadow-sm mb-5">
+            <h1 class="display-5 fw-bold text-navy mb-3">Bienvenido al Dashboard Academico</h1>
+        </section>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="program-card card h-100 p-4">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-navy text-white rounded-3 mb-3"
+                            style="width: 56px; height: 56px;">
+                            <span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+                        </div>
+                        <h3 class="h4 text-navy mb-3">Pasar Asistencia</h3>
+                        <p class="text-muted mb-4">Pasar asistencia para los estudiantes según curso.</p>
+                        <a class="mt-auto fw-semibold text-navy" href="#">Escoger Curso</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start mb-4 mb-md-0">
+                <span class="fw-bold text-yellow text-uppercase small" style="letter-spacing: 0.1em;">Academic Heritage Institute</span>
+                <p class="small text-light opacity-50 mt-2 mb-0">© 2024 Academic Heritage Institute. Excellence in Education.</p>
+            </div>
+            <div class="col-md-6">
+                <ul class="nav justify-content-center justify-content-md-end gap-4">
+                    <li><a class="nav-link text-light opacity-75" href="#">Privacidad</a></li>
+                    <li><a class="nav-link text-light opacity-75" href="#">Términos</a></li>
+                    <li><a class="nav-link text-light opacity-75" href="#">Soporte</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>

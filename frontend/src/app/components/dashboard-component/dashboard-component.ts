@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { UsuarioStore } from '../../services/users/usuario-store';
 
 @Component({
   selector: 'app-dashboard-component',
@@ -6,4 +8,12 @@ import { Component } from '@angular/core';
   templateUrl: './dashboard-component.html',
   styleUrl: './dashboard-component.css',
 })
-export class DashboardComponent {}
+export class DashboardComponent {
+  readonly usuarioStore = inject(UsuarioStore);
+  private readonly router = inject(Router);
+
+  logout(): void {
+    this.usuarioStore.logout();
+    this.router.navigate(['/login']);
+  }
+}
