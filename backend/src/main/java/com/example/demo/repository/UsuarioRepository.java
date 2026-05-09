@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.entity.UsuarioEntity;
 @Repository
 public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
-
+    boolean existsByUsername(String username);
 }

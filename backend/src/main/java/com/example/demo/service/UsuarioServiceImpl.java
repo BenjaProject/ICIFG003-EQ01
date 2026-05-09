@@ -3,7 +3,9 @@ package com.example.demo.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.entity.UsuarioEntity;
 import com.example.demo.interfaces.IUsuarioService;
@@ -26,6 +28,9 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     @Override
     public UsuarioEntity createUsuario(UsuarioEntity usuario) {
+        if (usuarioRepository.existsByUsername(usuario.getUsername())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre de usuario ya está en uso");
+        }
         return usuarioRepository.save(usuario);
     }
 
