@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
-import { UsuarioStore } from '../../services/users/usuario-store';
+import { UsuarioStore } from '../../services/usuario-store';
 import { filter } from 'rxjs/operators';
 
 @Component({

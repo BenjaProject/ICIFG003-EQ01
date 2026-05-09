@@ -1,9 +1,9 @@
 import { inject } from '@angular/core';
 import { Router, Routes } from '@angular/router';
-import { LandingComponent } from './components/landing-component/landing-component';
-import { LoginComponent } from './components/login-component/login-component';
-import { DashboardComponent } from './components/dashboard-component/dashboard-component'; 
-import { UsuarioStore } from './services/users/usuario-store';
+import { LandingComponent } from './features/users/components/landing-component/landing-component';
+import { LoginComponent } from './features/users/components/login-component/login-component';
+import { DashboardComponent } from './features/users/components/dashboard-component/dashboard-component';
+import { UsuarioStore } from './features/users/services/usuario-store';
 
 const authGuard = () => {
     const usuarioStore = inject(UsuarioStore);

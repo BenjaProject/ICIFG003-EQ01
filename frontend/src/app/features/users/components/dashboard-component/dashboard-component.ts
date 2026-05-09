@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { UsuarioStore } from '../../services/users/usuario-store';
+import { UsuarioStore } from '../../services/usuario-store';
 
 @Component({
   selector: 'app-dashboard-component',
