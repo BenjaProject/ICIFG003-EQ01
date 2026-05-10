@@ -2,10 +2,11 @@ package com.example.demo.interfaces;
 
 import java.util.List;
 
+import com.example.demo.dto.AtrasoDTO;
 import com.example.demo.entity.AtrasoEntity;
 
 public interface IAtrasoService {
-    List<AtrasoEntity> getAllAtrasos();
+    List<AtrasoDTO> getAllAtrasos();
     AtrasoEntity getAtrasoById(Long id);
     AtrasoEntity createAtraso(AtrasoEntity atraso);
     void deleteAtraso(Long id);
