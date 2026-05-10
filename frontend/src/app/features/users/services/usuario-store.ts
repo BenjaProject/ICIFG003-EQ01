@@ -44,8 +44,12 @@ export class UsuarioStore {
       },
       error: (err) => {
         this.loading.set(false);
-        this.isValid.set(false);
-        this.error.set('Error de conexión con el servidor');
+        if (err.status === 0) {
+          this.error.set('Error de conexión con el servidor');
+        } else {
+          this.isValid.set(false);
+          this.error.set(err?.error?.mensaje || 'Error al procesar la solicitud');
+        }
       },
     });
   }

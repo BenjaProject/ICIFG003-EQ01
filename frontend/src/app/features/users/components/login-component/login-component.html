@@ -45,25 +45,15 @@
 
                 @if (!isRegister() && authError()) {
                 <p class="mt-3 mb-0 text-center text-danger small">{{ authError() }}</p>
-                }
-
-                @if (usuarioStore.loading()) {
-                <p class="mt-3 mb-0 text-center text-secondary small">Procesando...</p>
-                }
-
-                @if (!isRegister() && usuarioStore.isValid() === true) {
-                <p class="mt-3 mb-0 text-center text-success small">Acceso concedido</p>
-                }
-
-                @if (!isRegister() && usuarioStore.isValid() === false) {
-                <p class="mt-3 mb-0 text-center text-danger small">Usuario o contraseña inválidos</p>
-                }
-
-                @if (isRegister() && usuarioStore.error()) {
+                } @else if (usuarioStore.error()) {
                 <p class="mt-3 mb-0 text-center text-danger small">{{ usuarioStore.error() }}</p>
-                }
-
-                @if (isRegister() && usuarioStore.createSuccess()) {
+                } @else if (usuarioStore.loading()) {
+                <p class="mt-3 mb-0 text-center text-secondary small">Procesando...</p>
+                } @else if (!isRegister() && usuarioStore.isValid() === true) {
+                <p class="mt-3 mb-0 text-center text-success small">Acceso concedido</p>
+                } @else if (!isRegister() && usuarioStore.isValid() === false) {
+                <p class="mt-3 mb-0 text-center text-danger small">Usuario o contraseña inválidos</p>
+                } @else if (isRegister() && usuarioStore.createSuccess()) {
                 <p class="mt-3 mb-0 text-center text-success small">Usuario registrado exitosamente</p>
                 }
             </form>
