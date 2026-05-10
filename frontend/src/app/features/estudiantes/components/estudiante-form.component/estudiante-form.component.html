@@ -1,0 +1,42 @@
+<form [formGroup]="form" (ngSubmit)="guardar()" class="p-4 card shadow-sm">
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Primer Nombre</label>
+      <input type="text" formControlName="nombre1" class="form-control">
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Segundo Nombre</label>
+      <input type="text" formControlName="nombre2" class="form-control">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Apellido Paterno</label>
+      <input type="text" formControlName="apellido1" class="form-control">
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Apellido Materno</label>
+      <input type="text" formControlName="apellido2" class="form-control">
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">RUN</label>
+    <input type="text" formControlName="run" class="form-control" placeholder="12.345.678-9">
+  </div>
+
+  <div class="mb-4">
+    <label class="form-label">Curso</label>
+    <select formControlName="idCurso" class="form-select">
+      <option value="" disabled>Seleccione un curso</option>
+      @for (curso of cursoStore.cursos(); track curso.idCurso) {
+        <option [value]="curso.idCurso">{{ curso.nombreCurso }}</option>
+      }
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary w-100" [disabled]="form.invalid">
+    Registrar Estudiante
+  </button>
+</form>

@@ -7,6 +7,8 @@ import com.example.demo.entity.EstudianteEntity;
 public interface IEstudianteService {
 	
 	public List<EstudianteEntity> findAll();
+
+	public List<EstudianteEntity> findByCursoId(Long cursoId);
 	
 	public EstudianteEntity findById(Long id);
 	

@@ -22,6 +22,11 @@ public class EstudianteServiceImpl implements IEstudianteService{
 	}
 
 	@Override
+	public List<EstudianteEntity> findByCursoId(Long cursoId) {
+		return repositoryEstudiante.findByCurso_Id(cursoId);
+	}
+
+	@Override
 	public EstudianteEntity findById(Long id) {
 		Optional<EstudianteEntity> ope = repositoryEstudiante.findById(id);
 		return ope.orElse(null);

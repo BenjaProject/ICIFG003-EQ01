@@ -25,7 +25,7 @@ public class EstudianteController {
 	@Autowired
 	private IEstudianteService service;
 	
-	@GetMapping("/")
+	@GetMapping
 	public ResponseEntity<?> readEstudiantes() {
 		try {
 			return ResponseEntity.ok(service.findAll());
@@ -33,8 +33,17 @@ public class EstudianteController {
 			return ResponseEntity.status(404).body(e);
 		}
 	}
+
+	@GetMapping("/curso/{cursoId}")
+	public ResponseEntity<?> readEstudiantesByCurso(@PathVariable Long cursoId) {
+		try {
+			return ResponseEntity.ok(service.findByCursoId(cursoId));
+		} catch (Exception e) {
+			return ResponseEntity.status(404).body(e);
+		}
+	}
 	
-	@PostMapping("/")
+	@PostMapping
 	public ResponseEntity<?> createEstudiante(@RequestBody EstudianteEntity estudianteEntity) {
 		try {
 			EstudianteEntity nuevoEstudiante = service.save(estudianteEntity);

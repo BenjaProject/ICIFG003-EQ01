@@ -1,4 +1,4 @@
-import { Curso } from "@features/curso/models/curso";
+import { Curso } from "@features/cursos/models/curso";
 
 export interface Estudiante{
     idEstudiante: number,
@@ -7,7 +7,7 @@ export interface Estudiante{
     apellido1: string,
     apellido2: string,
     run: string,
-    curso: Curso,
+    curso: Curso | null,
     cantAtrasos: number,
     cantInasistencias: number
 }

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { environment2 } from '../../../../../environments/environment'
+import { environmentUsers } from '../../../../../environments/environment'
 import { Observable } from 'rxjs';
 import { Usuario } from '../models/Usuario';
 @Injectable({
@@ -8,7 +8,7 @@ import { Usuario } from '../models/Usuario';
 })
 export class UsuarioService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment2.apiUrl}`;
+  private apiUrl = `${environmentUsers.apiUrl}`;
 
   getAll(): Observable<Usuario[]>{
     return this.http.get<Usuario[]>(this.apiUrl);

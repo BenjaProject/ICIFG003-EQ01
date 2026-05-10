@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { UsuarioStore } from '../../services/usuario-store';
 
 @Component({
   selector: 'app-dashboard-component',
-  imports: [],
+  standalone: true,
+  imports: [RouterLink],
   templateUrl: './dashboard-component.html',
   styleUrl: './dashboard-component.css',
 })

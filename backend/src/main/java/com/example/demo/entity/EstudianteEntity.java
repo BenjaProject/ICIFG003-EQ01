@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Formula;
 
 import lombok.AllArgsConstructor;
@@ -30,6 +32,7 @@ import lombok.NoArgsConstructor;
 public class EstudianteEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonProperty("idEstudiante")
 	private Long id;
 	
 	private String nombre1;
@@ -42,12 +45,13 @@ public class EstudianteEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_curso")
+	@JsonIgnoreProperties({"estudiantes", "hibernateLazyInitializer", "handler"})
 	private CursoEntity curso;
 
-	@Formula("(SELECT COUNT(*) FROM atrasos a WHERE a.id_estudiante = id_estudiante)")
+	@Formula("(SELECT COUNT(*) FROM inasistencia i WHERE i.id_estudiante = id)")
 	private Long cantidadInasistencias;
 
-	@Formula("(SELECT COUNT(*) FROM inasistencias i WHERE i.id_estudiante = id_estudiante)")
+	@Formula("(SELECT COUNT(*) FROM atraso a WHERE a.id_estudiante = id)")
 	private Long cantidadAtrasos;
 
 	@OneToMany(mappedBy = "estudiante", cascade = CascadeType.ALL, orphanRemoval = true)
