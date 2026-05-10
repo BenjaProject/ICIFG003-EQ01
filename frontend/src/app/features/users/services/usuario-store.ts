@@ -5,8 +5,8 @@ import { Usuario } from "../models/Usuario";
 @Injectable({
   providedIn: 'root',
 })
-export class UsuarioStore{
-    private service = inject(UsuarioService);
+export class UsuarioStore {
+  private service = inject(UsuarioService);
   readonly isValid = signal<boolean | null>(null);
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
@@ -28,24 +28,24 @@ export class UsuarioStore{
     this.loading.set(true);
     this.error.set(null);
     this.isValid.set(null);
-    this.createSuccess.set(false);
 
     this.service.loadUser(username, password).subscribe({
       next: (isValid) => {
         this.isValid.set(isValid);
         this.loading.set(false);
+
         if (isValid) {
           this.setSession(username);
-          console.log('Usuario valido');
+          console.log('Login exitoso');
         } else {
-          console.log('Usuario invalido');
+          this.error.set('Credenciales incorrectas');
+          console.log('Usuario o contraseña no válidos');
         }
       },
-      error: (error) => {
-        const message = error instanceof Error ? error.message : 'Error al validar usuario';
-        this.error.set(message);
+      error: (err) => {
         this.loading.set(false);
-        console.error('Error al validar usuario', error);
+        this.isValid.set(false);
+        this.error.set('Error de conexión con el servidor');
       },
     });
   }
@@ -68,7 +68,7 @@ export class UsuarioStore{
     }
   }
 
-  create(usuario:Usuario): void {
+  create(usuario: Usuario): void {
     this.loading.set(true);
     this.error.set(null);
     this.createSuccess.set(false);
@@ -77,12 +77,16 @@ export class UsuarioStore{
         this.createSuccess.set(true);
         this.loading.set(false);
       },
-      error: (error) => {
-        const message = error instanceof Error ? error.message : 'Error al crear usuario';
+      error: (err) => {
+        // El backend envía el mensaje en err.error.mensaje (HttpErrorResponse)
+        const message = err?.error?.mensaje
+          ?? err?.error?.message
+          ?? err?.message
+          ?? 'Error al crear usuario';
         this.error.set(message);
         this.createSuccess.set(false);
         this.loading.set(false);
-        console.error('Error al crear usuario', error);
+        console.error('Error al crear usuario', err);
       },
     });
   }

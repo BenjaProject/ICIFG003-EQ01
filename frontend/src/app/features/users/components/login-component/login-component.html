@@ -1,20 +1,22 @@
 <main>
-    <div class="container mt-4 ">
+    <div class="container mt-4">
         <a class="btn btn-primary" routerLink="/">Volver</a>
     </div>
-    <div class=" card shadow mt-4 container py-5 d-flex flex-column align-items-center gap-4">
+
+    <div class="card shadow mt-4 container py-5 d-flex flex-column align-items-center gap-4">
         <div class="card shadow-sm" style="max-width: 400px; width: 100%;">
             <div class="card-header bg-navy text-white text-center">
-        <span class="ls-wide text-uppercase" style="letter-spacing: 0.1em;">
-            @if (isRegister()) {
-            Registro
-            } @else {
-            Login
-            }
-        </span>
+                <span class="ls-wide text-uppercase" style="letter-spacing: 0.1em;">
+                    @if (isRegister()) {
+                    Registro
+                    } @else {
+                    Login
+                    }
+                </span>
             </div>
         </div>
-        <div class="card-body p-4">
+
+        <div class="card-body p-4" style="max-width: 400px; width: 100%;">
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
                 <div class="mb-3">
                     <label for="user" class="form-label text-navy fw-bold">Usuario</label>
@@ -30,43 +32,52 @@
 
                 <div class="d-grid gap-2">
                     @if (isRegister()) {
-                    <button type="submit" class="btn btn-yellow py-2">Registrarse</button>
+                    <button type="submit" class="btn btn-yellow py-2" [disabled]="usuarioStore.loading()">
+                        Registrarse
+                    </button>
                     } @else {
-                    <button type="submit" class="btn btn-yellow py-2">Ingresar</button>
+                    <button type="submit" class="btn btn-yellow py-2" [disabled]="usuarioStore.loading()">
+                        Ingresar
+                    </button>
                     <a class="btn btn-outline-secondary py-2" routerLink="/registro">Registrarse</a>
                     }
                 </div>
 
                 @if (!isRegister() && authError()) {
-                <p class="mt-3 mb-0 text-center text-danger">{{ authError() }}</p>
+                <p class="mt-3 mb-0 text-center text-danger small">{{ authError() }}</p>
                 }
 
-                @if (!isRegister() && usuarioStore.loading()) {
-                <p class="mt-3 mb-0 text-center text-secondary">Validando...</p>
+                @if (usuarioStore.loading()) {
+                <p class="mt-3 mb-0 text-center text-secondary small">Procesando...</p>
                 }
 
                 @if (!isRegister() && usuarioStore.isValid() === true) {
-                <p class="mt-3 mb-0 text-center text-success">Usuario valido</p>
+                <p class="mt-3 mb-0 text-center text-success small">Acceso concedido</p>
                 }
 
                 @if (!isRegister() && usuarioStore.isValid() === false) {
-                <p class="mt-3 mb-0 text-center text-danger">Usuario invalido</p>
+                <p class="mt-3 mb-0 text-center text-danger small">Usuario o contraseña inválidos</p>
                 }
 
-                @if (!isRegister() && usuarioStore.error()) {
-                <p class="mt-3 mb-0 text-center text-danger">{{ usuarioStore.error() }}</p>
+                @if (isRegister() && usuarioStore.error()) {
+                <p class="mt-3 mb-0 text-center text-danger small">{{ usuarioStore.error() }}</p>
+                }
+
+                @if (isRegister() && usuarioStore.createSuccess()) {
+                <p class="mt-3 mb-0 text-center text-success small">Usuario registrado exitosamente</p>
                 }
             </form>
         </div>
-
     </div>
 </main>
+
 <footer>
     <div class="container">
         <div class="row align-items-center">
             <div class="col-md-6 text-center text-md-start mb-4 mb-md-0">
-                <span class="fw-bold text-yellow text-uppercase small" style="letter-spacing: 0.1em;">Aplicaciones y
-                    Tecnologias de la web</span>
+                <span class="fw-bold text-yellow text-uppercase small" style="letter-spacing: 0.1em;">
+                    Aplicaciones y Tecnologías de la web
+                </span>
                 <p class="small text-light opacity-50 mt-2 mb-0">© Universidad San Sebastián.</p>
             </div>
             <div class="col-md-6">
@@ -74,7 +85,6 @@
                     <li>
                         <a href="https://github.com/BenjaProject/ICIFG003-EQ01" target="_blank"
                             rel="noopener noreferrer" class="github-link">
-
                             <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"
                                 fill="currentColor">
                                 <path

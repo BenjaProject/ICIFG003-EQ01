@@ -7,7 +7,7 @@ import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login-component',
-  standalone: true, // Asegúrate de que esto esté si usas Angular moderno
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login-component.html',
   styleUrl: './login-component.css',
@@ -18,7 +18,9 @@ export class LoginComponent {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   readonly usuarioStore = inject(UsuarioStore);
+
   readonly isRegister = signal(false);
+
   readonly authError = signal<string | null>(null);
 
   constructor() {
