@@ -8,6 +8,6 @@ export interface Estudiante{
     apellido2: string,
     run: string,
     curso: Curso | null,
-    cantAtrasos: number,
-    cantInasistencias: number
+    cantidadAtrasos: number,
+    cantidadInasistencias: number
 }
