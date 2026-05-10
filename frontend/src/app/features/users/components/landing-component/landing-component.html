@@ -9,11 +9,27 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mx-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/dashboard">Dashboard de Asistencia</a>
-                </li>
+                @if (usuarioStore.isValid()) {
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="/dashboard">Dashboard de Asistencia</a>
+                    </li>
+                }
             </ul>
-            <a routerLink="/login" class="btn btn-yellow px-4 py-2">Login</a>
+            @if (!usuarioStore.isValid()) {
+                <a routerLink="/login" class="btn btn-yellow px-4 py-2">Login</a>
+            } @else {
+                <div class="d-flex align-items-center gap-3">
+                    <div class="text-end">
+                        <span class="d-block text-yellow fw-bold small text-uppercase"
+                        style="letter-spacing: 0.1em;">Usuario</span>
+                        <span class="text-white small">{{ usuarioStore.username() }}</span>
+                    </div>
+                    <button (click)="logout()" class="btn btn-outline-light btn-sm px-3 py-2">
+                        Cerrar Sesión
+                    </button>
+                </div>
+            }
+            
         </div>
     </div>
 </nav>
