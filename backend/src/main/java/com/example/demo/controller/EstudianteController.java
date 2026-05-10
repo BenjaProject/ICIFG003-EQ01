@@ -56,16 +56,20 @@ public class EstudianteController {
 	@PutMapping("/{id}")
 	public ResponseEntity<?> updateEstudiante(@PathVariable Long id, @RequestBody EstudianteEntity EstudianteActualizado) {
 		try {
-			if (service.findById(id) == null) {
+			EstudianteEntity existente = service.findById(id);
+			if (existente == null) {
 				return ResponseEntity.status(404).body("No se encontró estudiante para actualizar. ID; " + id + " \n");
 			}
 			else
 			{
-				service.save(EstudianteEntity.builder().nombre1(EstudianteActualizado.getNombre1()).nombre2(EstudianteActualizado.getNombre2())
-						.apellido1(EstudianteActualizado.getApellido1()).apellido2(EstudianteActualizado.getApellido2()).run
-						(EstudianteActualizado.getRun()).curso(EstudianteActualizado.getCurso()).cantidadAtrasos(EstudianteActualizado.getCantidadAtrasos())
-						.cantidadInasistencias(EstudianteActualizado.getCantidadInasistencias()).id(id).build());
-				return ResponseEntity.ok().body("Persona actualizada con éxito. ID; " + id + " \n");
+				existente.setNombre1(EstudianteActualizado.getNombre1());
+				existente.setNombre2(EstudianteActualizado.getNombre2());
+				existente.setApellido1(EstudianteActualizado.getApellido1());
+				existente.setApellido2(EstudianteActualizado.getApellido2());
+				existente.setRun(EstudianteActualizado.getRun());
+				existente.setCurso(EstudianteActualizado.getCurso());
+				EstudianteEntity actualizado = service.save(existente);
+				return ResponseEntity.ok(actualizado);
 			}
 		} catch (Exception e) {
 			return ResponseEntity.status(404).body(e);
@@ -76,7 +80,7 @@ public class EstudianteController {
 	public ResponseEntity<?> deleteById(@PathVariable Long id) {
 		try {
 			service.deleteById(id);
-			return ResponseEntity.ok().body("Estudiante eliminado con éxito. ID: " + id + " \n");
+			return ResponseEntity.noContent().build();
 		} catch (Exception e) {
 			return ResponseEntity.status(500).body("Error al eliminar al estudiante ID = " + id + " \n" + e);
 		}

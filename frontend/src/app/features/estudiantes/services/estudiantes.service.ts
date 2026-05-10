@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environmentEstudiantes } from '@environments/environment';
 import { Estudiante } from '../models/estudiante';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +29,8 @@ export class EstudiantesService {
   }
 
   delete(id:number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http
+      .delete(`${this.apiUrl}/${id}`, { responseType: 'text' })
+      .pipe(map(() => void 0));
   }
 }

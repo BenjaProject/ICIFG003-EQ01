@@ -24,6 +24,19 @@ export class UsuarioStore {
     }
   }
 
+  hasStoredSession(): boolean {
+    if (!this.canUseStorage) {
+      return false;
+    }
+    const storedUsername = window.localStorage.getItem('username');
+    if (storedUsername) {
+      this.username.set(storedUsername);
+      this.isValid.set(true);
+      return true;
+    }
+    return false;
+  }
+
   loadUser(username: string, password: string): void {
     this.loading.set(true);
     this.error.set(null);

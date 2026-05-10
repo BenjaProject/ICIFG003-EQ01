@@ -62,7 +62,7 @@ public class CursoController {
                 return ResponseEntity.status(404).body("Curso not found");
             }
             cursoService.deleteCurso(id);
-            return ResponseEntity.ok("Curso deleted successfully");
+            return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.status(404).body(e);
         }

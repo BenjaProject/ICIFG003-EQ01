@@ -1,19 +1,58 @@
-<div class="page">
-  <div class="page-header">
-    <div>
-      <h1>Gestion de Estudiantes</h1>
-      <p>Administra registros y consulta estudiantes por curso.</p>
+<header>
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/dashboard">
+        <span class="material-symbols-outlined text-yellow" data-icon="school">school</span>
+        <span class="text-uppercase fw-semibold" style="letter-spacing: 0.1em;">Proyecto Aplicaciones Web</span>
+      </a>
+      <button class="navbar-toggler" data-bs-target="#navbarEstudiantes" data-bs-toggle="collapse" type="button">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarEstudiantes">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/dashboard">Menú Principal</a>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center gap-3">
+          @if (usuarioStore.isValid()) {
+          <span class="text-white fw-semibold">Hola, {{ usuarioStore.username() || 'Usuario' }}</span>
+          <button type="button" class="btn btn-outline-light btn-sm" (click)="logout()">Cerrar sesion</button>
+          } @else {
+          <a routerLink="/login" class="btn btn-yellow px-4 py-2">Login</a>
+          }
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main class="py-5 bg-light">
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <div>
+        <h1 class="fw-bold text-navy mb-2">Gestion de Estudiantes</h1>
+        <p class="text-muted mb-0">Administra registros y consulta estudiantes por curso.</p>
+      </div>
+    </div>
+
+    <div class="row g-4 align-items-start">
+      <div class="col-lg-4">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="text-navy mb-3">Nuevo Estudiante</h5>
+            <app-estudiante-form></app-estudiante-form>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="text-navy mb-3">Listado</h5>
+            <app-estudiante-list></app-estudiante-list>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-
-  <div class="page-grid">
-    <section class="panel">
-      <h2>Nuevo Estudiante</h2>
-      <app-estudiante-form></app-estudiante-form>
-    </section>
-    <section class="panel">
-      <h2>Listado</h2>
-      <app-estudiante-list></app-estudiante-list>
-    </section>
-  </div>
-</div>
+</main>

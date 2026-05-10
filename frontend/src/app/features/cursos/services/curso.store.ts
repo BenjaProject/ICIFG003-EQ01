@@ -15,13 +15,15 @@ export class CursoStore {
 
   loadCursos(): void {
     this.loading.set(true);
+    this.error.set(null);
     this.cursoService.getAll().subscribe({
       next: data => {
         this.cursos.set(data);
         this.loading.set(false);
       },
-      error: () => {
-        this.error.set('Error al cargar cursos');
+      error: (err) => {
+        const message = err?.error?.message ?? err?.error ?? 'Error al cargar cursos';
+        this.error.set(message);
         this.loading.set(false);
       },
     });
@@ -36,28 +38,40 @@ export class CursoStore {
   }
 
   addCurso(curso: Curso): void {
+    this.error.set(null);
     this.cursoService.create(curso).subscribe({
       next: data => this.cursos.update(list => [...list, data]),
-      error: () => {
-        this.error.set('Error al agregar curso');
+      error: (err) => {
+        const message = err?.error?.message ?? err?.error ?? 'Error al agregar curso';
+        this.error.set(message);
       },
     });
   }
 
   updateCurso(curso: Curso): void {
-    this.cursoService.update(curso).subscribe(data => {
-      this.cursos.update(list =>
-        list.map(item => (item.idCurso === data.idCurso ? data : item))
-      );
-      this.clearSelected();
+    this.error.set(null);
+    this.cursoService.update(curso).subscribe({
+      next: () => {
+        this.loadCursos();
+        this.clearSelected();
+      },
+      error: (err) => {
+        const message = err?.error?.message ?? err?.error ?? 'Error al actualizar curso';
+        this.error.set(message);
+      }
     });
   }
 
   deleteCurso(id: number): void {
+    this.error.set(null);
     this.cursoService.delete(id).subscribe({
       next: () => {
-        this.cursos.update(list => list.filter(item => item.idCurso !== id));
+        this.loadCursos();
       },
+      error: (err) => {
+        const message = err?.error?.message ?? err?.error ?? 'Error al eliminar curso';
+        this.error.set(message);
+      }
     });
   }
 }

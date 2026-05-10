@@ -13,6 +13,9 @@ const authGuard = () => {
     if (usuarioStore.isValid()) {
         return true;
     }
+    if (usuarioStore.hasStoredSession()) {
+        return true;
+    }
     return router.createUrlTree(['/login'], { queryParams: { error: 'auth' } });
 };
 
