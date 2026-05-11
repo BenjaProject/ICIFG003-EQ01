@@ -9,8 +9,10 @@ import org.springframework.data.repository.query.Param;
 
 import com.example.demo.entity.InasitenciaEntity;
 import com.example.demo.dto.InasistenciaDTO;
+
 @Repository
 public interface InasistenciaRepository extends JpaRepository<InasitenciaEntity, Long> {
+
 	@Query("""
 		select new com.example.demo.dto.InasistenciaDTO(
 			i.id,
@@ -26,6 +28,7 @@ public interface InasistenciaRepository extends JpaRepository<InasitenciaEntity,
 		join i.estudiante e
 		join e.curso c
 		where c.id = :cursoId
+		order by i.fecha DESC
 		""")
 	List<InasistenciaDTO> findDtoByCursoId(@Param("cursoId") Long cursoId);
 
@@ -43,6 +46,7 @@ public interface InasistenciaRepository extends JpaRepository<InasitenciaEntity,
 		from InasitenciaEntity i
 		join i.estudiante e
 		join e.curso c
+		order by i.fecha DESC
 		""")
 	List<InasistenciaDTO> findAllDtos();
 }
