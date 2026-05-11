@@ -1,4 +1,6 @@
 import { Curso } from "@features/cursos/models/curso";
+import { Atraso } from "@features/atraso/models/atraso";
+import { Inasistencia } from "@features/inasistencia/models/inasistencia";
 
 export interface Estudiante{
     idEstudiante: number,
@@ -9,5 +11,7 @@ export interface Estudiante{
     run: string,
     curso: Curso | null,
     cantidadAtrasos: number,
-    cantidadInasistencias: number
+    cantidadInasistencias: number,
+    atrasos?: Atraso[],
+    inasistencias?: Inasistencia[]
 }

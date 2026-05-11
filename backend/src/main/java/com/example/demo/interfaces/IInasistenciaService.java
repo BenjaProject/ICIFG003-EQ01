@@ -9,5 +9,6 @@ public interface IInasistenciaService {
     List<InasistenciaDTO> getAllInasistencias();
     InasitenciaEntity getInasistenciaById(Long id);
     InasitenciaEntity createInasistencia(InasitenciaEntity inasistencia);
+    InasitenciaEntity createInasistenciaForEstudiante(Long estudianteId, InasitenciaEntity inasistencia);
     void deleteInasistencia(Long id);
 }

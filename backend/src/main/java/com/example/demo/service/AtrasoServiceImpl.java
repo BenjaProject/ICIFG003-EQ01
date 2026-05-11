@@ -9,11 +9,16 @@ import com.example.demo.dto.AtrasoDTO;
 import com.example.demo.entity.AtrasoEntity;
 import com.example.demo.entity.EstudianteEntity;
 import com.example.demo.interfaces.IAtrasoService;
+import com.example.demo.interfaces.IEstudianteService;
 import com.example.demo.repository.AtrasoRepository;
 @Service
 public class AtrasoServiceImpl implements IAtrasoService {
     @Autowired
     private AtrasoRepository atrasoRepository;
+    
+    @Autowired
+    private IEstudianteService estudianteService;
+    
     @Override
     public List<AtrasoDTO> getAllAtrasos() {
         return atrasoRepository.findAll().stream()
@@ -29,6 +34,16 @@ public class AtrasoServiceImpl implements IAtrasoService {
     @Override
     public AtrasoEntity createAtraso(AtrasoEntity atraso) {
         return atrasoRepository.save(atraso);
+    }
+
+    @Override
+    public AtrasoEntity createAtrasoForEstudiante(Long estudianteId, AtrasoEntity atraso) {
+        EstudianteEntity estudiante = estudianteService.findById(estudianteId);
+        if (estudiante != null) {
+            atraso.setEstudiante(estudiante);
+            return atrasoRepository.save(atraso);
+        }
+        throw new IllegalArgumentException("Estudiante no encontrado con ID: " + estudianteId);
     }
 
     @Override
@@ -72,4 +87,4 @@ public class AtrasoServiceImpl implements IAtrasoService {
         return value == null ? "" : value.trim();
     }
 
-}
+}}

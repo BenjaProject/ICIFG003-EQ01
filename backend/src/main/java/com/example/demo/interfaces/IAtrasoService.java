@@ -9,6 +9,6 @@ public interface IAtrasoService {
     List<AtrasoDTO> getAllAtrasos();
     AtrasoEntity getAtrasoById(Long id);
     AtrasoEntity createAtraso(AtrasoEntity atraso);
+    AtrasoEntity createAtrasoForEstudiante(Long estudianteId, AtrasoEntity atraso);
     void deleteAtraso(Long id);
-
 }

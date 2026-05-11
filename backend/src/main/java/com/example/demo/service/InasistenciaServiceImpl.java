@@ -8,13 +8,16 @@ import org.springframework.stereotype.Service;
 import com.example.demo.dto.InasistenciaDTO;
 import com.example.demo.entity.EstudianteEntity;
 import com.example.demo.entity.InasitenciaEntity;
-import com.example.demo.interfaces.IInasistenciaService;
+import com.example.demo.interfaces.IEstudianteService;
 import com.example.demo.repository.InasistenciaRepository;
 
 @Service
 public class InasistenciaServiceImpl implements IInasistenciaService {
     @Autowired
     private InasistenciaRepository inasistenciaRepository;
+    
+    @Autowired
+    private IEstudianteService estudianteService;
     @Override
     public List<InasistenciaDTO> getAllInasistencias() {
         return inasistenciaRepository.findAll().stream()
@@ -30,6 +33,16 @@ public class InasistenciaServiceImpl implements IInasistenciaService {
     @Override
     public InasitenciaEntity createInasistencia(InasitenciaEntity inasistencia) {
         return inasistenciaRepository.save(inasistencia);
+    }
+
+    @Override
+    public InasitenciaEntity createInasistenciaForEstudiante(Long estudianteId, InasitenciaEntity inasistencia) {
+        EstudianteEntity estudiante = estudianteService.findById(estudianteId);
+        if (estudiante != null) {
+            inasistencia.setEstudiante(estudiante);
+            return inasistenciaRepository.save(inasistencia);
+        }
+        throw new IllegalArgumentException("Estudiante no encontrado con ID: " + estudianteId);
     }
 
     @Override
