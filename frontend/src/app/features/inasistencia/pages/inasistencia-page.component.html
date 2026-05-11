@@ -39,8 +39,8 @@
           Consulta y edita inasistencias por curso.
         </p>
       </div>
-      @if (cursoId) {
-      <span class="badge bg-primary">Curso #{{ cursoId }}</span>
+      @if (cursoId()) {
+      <span class="badge bg-primary">Curso #{{ cursoId() }}</span>
       }
     </div>
 
@@ -56,8 +56,8 @@
                 type="text"
                 class="form-control"
                 placeholder="Buscar estudiante..."
-                [(ngModel)]="searchTerm"
-                (input)="onSearchChange()"
+                [ngModel]="searchTerm()"
+                (ngModelChange)="onSearchChange($event)"
               />
             </div>
           </div>
@@ -75,17 +75,17 @@
               </tr>
             </thead>
             <tbody>
-              @if (error) {
+              @if (error()) {
                 <tr>
-                  <td class="text-danger fw-semibold" colspan="5">{{ error }}</td>
+                  <td class="text-danger fw-semibold" colspan="5">{{ error() }}</td>
                 </tr>
               }
-              @if (!loading && filteredInasistencias.length === 0) {
+              @if (!loading() && filteredInasistencias().length === 0) {
                 <tr>
                   <td class="text-muted" colspan="5">No hay inasistencias registradas.</td>
                 </tr>
               }
-              @for (item of filteredInasistencias; track item.id) {
+              @for (item of filteredInasistencias(); track item.id) {
                 <tr>
                   <td>#{{ item.id }}</td>
                   <td>{{ item.nombreEstudiante }} {{ item.apellidoEstudiante }}</td>
@@ -98,7 +98,7 @@
                   </td>
                 </tr>
               }
-              @if (loading) {
+              @if (loading()) {
                 <tr>
                   <td colspan="5">Cargando inasistencias...</td>
                 </tr>
