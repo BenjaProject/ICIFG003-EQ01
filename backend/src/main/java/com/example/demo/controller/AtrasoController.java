@@ -28,7 +28,7 @@ public class AtrasoController {
         try {
             return ResponseEntity.ok(atrasoService.getAllAtrasos());
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(e);
+            return ResponseEntity.status(404).body(e.getMessage());
         }
     }
 
@@ -41,7 +41,7 @@ public class AtrasoController {
             }
             return ResponseEntity.ok(atraso);
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(e);
+            return ResponseEntity.status(404).body(e.getMessage());
         }
     }
 

@@ -28,7 +28,16 @@ public class InasistenciaController {
         try {
             return ResponseEntity.ok(inasistenciaService.getAllInasistencias());
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(e);
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/curso/{cursoId}")
+    public ResponseEntity<?> getInasistenciasByCurso(@PathVariable Long cursoId) {
+        try {
+            return ResponseEntity.ok(inasistenciaService.getInasistenciasByCursoId(cursoId));
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
@@ -41,7 +50,7 @@ public class InasistenciaController {
             }
             return ResponseEntity.ok(inasistencia);
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(e);
+            return ResponseEntity.status(404).body(e.getMessage());
         }
     }
 
@@ -68,7 +77,7 @@ public class InasistenciaController {
                 return ResponseEntity.status(404).body("No se encontró inasistencia para actualizar. ID: " + id);
             } else {
                 existente.setFecha(inasistenciaActualizada.getFecha());
-                existente.setJustificada(inasistenciaActualizada.isJustificada());
+                existente.setJustificada(inasistenciaActualizada.getJustificada());
                 InasitenciaEntity actualizada = inasistenciaService.createInasistencia(existente);
                 return ResponseEntity.ok(actualizada);
             }

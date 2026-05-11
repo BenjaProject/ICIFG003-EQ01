@@ -7,6 +7,7 @@ import com.example.demo.entity.InasitenciaEntity;
 
 public interface IInasistenciaService {
     List<InasistenciaDTO> getAllInasistencias();
+    List<InasistenciaDTO> getInasistenciasByCursoId(Long cursoId);
     InasitenciaEntity getInasistenciaById(Long id);
     InasitenciaEntity createInasistencia(InasitenciaEntity inasistencia);
     InasitenciaEntity createInasistenciaForEstudiante(Long estudianteId, InasitenciaEntity inasistencia);

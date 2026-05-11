@@ -1,0 +1,112 @@
+<header>
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/dashboard">
+        <span class="material-symbols-outlined text-yellow" data-icon="school">school</span>
+        <span class="text-uppercase fw-semibold" style="letter-spacing: 0.1em;">Proyecto Aplicaciones Web</span>
+      </a>
+      <button class="navbar-toggler" data-bs-target="#navbarInasistencias" data-bs-toggle="collapse" type="button">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarInasistencias">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/dashboard">Menu Principal</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/estudiantes">Estudiantes</a>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center gap-3">
+          @if (usuarioStore.isValid()) {
+          <span class="text-white fw-semibold">Hola, {{ usuarioStore.username() || 'Usuario' }}</span>
+          <button type="button" class="btn btn-outline-light btn-sm" (click)="logout()">Cerrar sesion</button>
+          } @else {
+          <a routerLink="/login" class="btn btn-yellow px-4 py-2">Login</a>
+          }
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main class="py-5 bg-light">
+  <div class="container">
+    <div class="d-flex flex-wrap gap-3 align-items-center justify-content-between mb-4">
+      <div>
+        <h1 class="fw-bold text-navy mb-2">Gestion de Inasistencias</h1>
+        <p class="text-muted mb-0">
+          Consulta y edita inasistencias por curso.
+        </p>
+      </div>
+      @if (cursoId) {
+      <span class="badge bg-primary">Curso #{{ cursoId }}</span>
+      }
+    </div>
+
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <div class="row g-3 align-items-center mb-3">
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text">
+                <span class="material-symbols-outlined" data-icon="search">search</span>
+              </span>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Buscar estudiante..."
+                [(ngModel)]="searchTerm"
+                (input)="onSearchChange()"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-primary">
+              <tr>
+                <th>#</th>
+                <th>Estudiante</th>
+                <th>Curso</th>
+                <th>Fecha</th>
+                <th>Justificada</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if (error) {
+                <tr>
+                  <td class="text-danger fw-semibold" colspan="5">{{ error }}</td>
+                </tr>
+              }
+              @if (!loading && filteredInasistencias.length === 0) {
+                <tr>
+                  <td class="text-muted" colspan="5">No hay inasistencias registradas.</td>
+                </tr>
+              }
+              @for (item of filteredInasistencias; track item.id) {
+                <tr>
+                  <td>#{{ item.id }}</td>
+                  <td>{{ item.nombreEstudiante }} {{ item.apellidoEstudiante }}</td>
+                  <td>{{ item.nombreCurso || 'Sin curso' }}</td>
+                  <td>{{ item.fecha }}</td>
+                  <td>
+                    <span class="badge" [class.bg-success]="item.justificada" [class.bg-danger]="!item.justificada">
+                      {{ item.justificada ? 'Si' : 'No' }}
+                    </span>
+                  </td>
+                </tr>
+              }
+              @if (loading) {
+                <tr>
+                  <td colspan="5">Cargando inasistencias...</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

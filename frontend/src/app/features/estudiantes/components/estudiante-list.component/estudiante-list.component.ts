@@ -1,15 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { AtrasoService } from '@features/atraso/services/atraso.service';
+import { ChangeDetectorRef, Component, effect, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EstudianteStore } from '@features/estudiantes/services/estudiante.store';
 import { InasistenciaService } from '@features/inasistencia/services/inasistencia.service';
-// 1. Importamos los nuevos servicios
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-estudiante-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './estudiante-list.component.html',
   styleUrl: './estudiante-list.component.css',
 })
@@ -17,12 +17,19 @@ export class EstudianteListComponent {
 
   store = inject(EstudianteStore);
   private route = inject(ActivatedRoute);
-  // 2. Inyectamos los servicios
-  private atrasoService = inject(AtrasoService);
+  private router = inject(Router);
   private inasistenciaService = inject(InasistenciaService);
+  private cdr = inject(ChangeDetectorRef);
 
   // Guardamos el cursoId actual para refrescar la lista después
   private currentCursoId: number | null = null;
+  attendanceDate = this.getToday();
+  attendanceStatus: Record<number, 'present' | 'absent'> = {};
+  attendanceError: string | null = null;
+  sendingAttendance = false;
+  private readonly attendanceEffect = effect(() => {
+    this.ensureAttendanceDefaults();
+  });
 
   ngOnInit(){
     this.route.queryParamMap.subscribe(params => {
@@ -41,27 +48,30 @@ export class EstudianteListComponent {
     }
   }
 
-  // 3. Nuevas funciones para los botones (+) y (-)
-  addAtraso(estudiante: any) {
-    this.atrasoService.agregar(estudiante.idEstudiante).subscribe(() => this.refreshList());
-  }
+  sendAttendance(): void {
+    const ausentes = this.store
+      .estudiantes()
+      .filter(estudiante => this.attendanceStatus[estudiante.idEstudiante] === 'absent')
+      .map(estudiante => estudiante.idEstudiante);
 
-  removeAtraso(estudiante: any) {
-    if (estudiante.atrasos?.length > 0) {
-      const idAEliminar = estudiante.atrasos[estudiante.atrasos.length - 1].idAtraso;
-      this.atrasoService.quitar(idAEliminar).subscribe(() => this.refreshList());
+    this.attendanceError = null;
+    this.sendingAttendance = true;
+    if (ausentes.length === 0) {
+      setTimeout(() => {
+        this.finishSending();
+      }, 400);
+      return;
     }
-  }
-
-  addInasistencia(estudiante: any) {
-    this.inasistenciaService.agregar(estudiante.idEstudiante).subscribe(() => this.refreshList());
-  }
-
-  removeInasistencia(estudiante: any) {
-    if (estudiante.inasistencias?.length > 0) {
-      const idAEliminar = estudiante.inasistencias[estudiante.inasistencias.length - 1].idInasistencia;
-      this.inasistenciaService.quitar(idAEliminar).subscribe(() => this.refreshList());
-    }
+    forkJoin(ausentes.map(id => this.inasistenciaService.agregar(id, this.attendanceDate))).subscribe({
+      next: () => {
+        this.finishSending();
+        this.refreshList();
+      },
+      error: () => {
+        this.finishSending();
+        this.attendanceError = 'Error al enviar asistencia';
+      }
+    });
   }
 
   editarEstudiante(estudiante:any){
@@ -72,5 +82,38 @@ export class EstudianteListComponent {
     if(confirm('¿Estás seguro de eliminar este estudiante?')){
       this.store.deleteEstudiante(id);
     }
+  }
+
+  goToInasistencias(): void {
+    if (this.currentCursoId && !Number.isNaN(this.currentCursoId)) {
+      this.router.navigate(['/inasistencias'], { queryParams: { cursoId: this.currentCursoId } });
+      return;
+    }
+    this.router.navigate(['/inasistencias']);
+  }
+
+  private ensureAttendanceDefaults(): void {
+    for (const estudiante of this.store.estudiantes()) {
+      if (!this.attendanceStatus[estudiante.idEstudiante]) {
+        this.attendanceStatus[estudiante.idEstudiante] = 'present';
+      }
+    }
+  }
+
+  isAttendanceSelected(estudianteId: number, status: 'present' | 'absent'): boolean {
+    return this.attendanceStatus[estudianteId] === status;
+  }
+
+  setAttendanceStatus(estudianteId: number, status: 'present' | 'absent'): void {
+    this.attendanceStatus[estudianteId] = status;
+  }
+
+  private finishSending(): void {
+    this.sendingAttendance = false;
+    this.cdr.markForCheck();
+  }
+
+  private getToday(): string {
+    return new Date().toISOString().split('T')[0];
   }
 }

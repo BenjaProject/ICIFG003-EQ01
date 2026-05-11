@@ -1,9 +1,34 @@
+<div class="d-flex flex-wrap gap-3 align-items-center justify-content-between mb-3">
+    <div class="d-flex align-items-center gap-2">
+        <label class="small text-muted" for="attendance-date">Fecha</label>
+        <input
+            id="attendance-date"
+            type="date"
+            class="form-control form-control-sm"
+            [(ngModel)]="attendanceDate"
+        />
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-primary btn-sm" (click)="sendAttendance()" [disabled]="sendingAttendance">
+            {{ sendingAttendance ? 'Enviando...' : 'Enviar asistencia' }}
+        </button>
+        <button class="btn btn-outline-secondary btn-sm" type="button" (click)="goToInasistencias()">
+            Editar inasistencias
+        </button>
+    </div>
+</div>
+
+@if (attendanceError) {
+    <div class="text-danger small mb-2">{{ attendanceError }}</div>
+}
+
 <table class="table table-hover table-striped">
     <thead class="table-light">
         <tr>
             <th>#</th>
             <th>Estudiante</th>
             <th>Curso</th>
+            <th class="text-center">Asistencia</th>
             <th class="text-center">Atrasos / Inasistencias</th>
             <th class="text-end">Acciones</th>
         </tr>
@@ -11,13 +36,13 @@
     <tbody>
         @if (store.error()) {
             <tr>
-                <td class="text-danger fw-semibold" colspan="5">{{ store.error() }}</td>
+                <td class="text-danger fw-semibold" colspan="6">{{ store.error() }}</td>
             </tr>
         }
 
         @if (!store.loading() && store.estudiantes().length === 0) {
             <tr>
-                <td class="text-muted" colspan="5">No hay estudiantes registrados.</td>
+                <td class="text-muted" colspan="6">No hay estudiantes registrados.</td>
             </tr>
         }
 
@@ -38,31 +63,36 @@
                 </div>
             </td>
             <td>{{ estudiante.curso?.nombreCurso || 'Sin curso' }}</td>
+            <td class="text-center">
+                <div class="btn-group" role="group">
+                    <input
+                        class="btn-check"
+                        type="radio"
+                        [id]="'attendance-present-' + estudiante.idEstudiante"
+                        [name]="'attendance-' + estudiante.idEstudiante"
+                        [checked]="isAttendanceSelected(estudiante.idEstudiante, 'present')"
+                        (change)="setAttendanceStatus(estudiante.idEstudiante, 'present')"
+                    />
+                    <label class="btn btn-outline-success btn-sm" [for]="'attendance-present-' + estudiante.idEstudiante">
+                        Presente
+                    </label>
+
+                    <input
+                        class="btn-check"
+                        type="radio"
+                        [id]="'attendance-absent-' + estudiante.idEstudiante"
+                        [name]="'attendance-' + estudiante.idEstudiante"
+                        [checked]="isAttendanceSelected(estudiante.idEstudiante, 'absent')"
+                        (change)="setAttendanceStatus(estudiante.idEstudiante, 'absent')"
+                    />
+                    <label class="btn btn-outline-danger btn-sm" [for]="'attendance-absent-' + estudiante.idEstudiante">
+                        Ausente
+                    </label>
+                </div>
+            </td>
 
             <td class="text-center">
-                <div class="d-flex align-items-center justify-content-center gap-2">
-                    <button class="btn btn-sm btn-link p-0 text-warning" 
-                            (click)="removeAtraso(estudiante)" 
-                            [disabled]="!estudiante.atrasos?.length">
-                        <span class="material-symbols-outlined" style="font-size: 18px;">remove_circle</span>
-                    </button>
-                    <span class="fw-bold">{{ estudiante.atrasos?.length || 0 }}</span>
-                    <button class="btn btn-sm btn-link p-0 text-warning" (click)="addAtraso(estudiante)">
-                        <span class="material-symbols-outlined" style="font-size: 18px;">add_circle</span>
-                    </button>
-            
-                    <span class="mx-1">/</span>
-            
-                    <button class="btn btn-sm btn-link p-0 text-danger" 
-                            (click)="removeInasistencia(estudiante)" 
-                            [disabled]="!estudiante.inasistencias?.length">
-                        <span class="material-symbols-outlined" style="font-size: 18px;">remove_circle</span>
-                    </button>
-                    <span class="fw-bold text-danger">{{ estudiante.inasistencias?.length || 0 }}</span>
-                    <button class="btn btn-sm btn-link p-0 text-danger" (click)="addInasistencia(estudiante)">
-                        <span class="material-symbols-outlined" style="font-size: 18px;">add_circle</span>
-                    </button>
-                </div>
+                {{ estudiante.cantidadAtrasos }} / {{ estudiante.cantidadInasistencias }}
             </td>
 
             <td class="text-end">
@@ -78,7 +108,7 @@
         </tr>
         } @if (store.loading()) {
             <tr>
-                <td colspan="5">Cargando estudiantes...</td>
+                <td colspan="6">Cargando estudiantes...</td>
             </tr>
         }
     </tbody>

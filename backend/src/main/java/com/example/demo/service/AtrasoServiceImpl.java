@@ -21,9 +21,7 @@ public class AtrasoServiceImpl implements IAtrasoService {
     
     @Override
     public List<AtrasoDTO> getAllAtrasos() {
-        return atrasoRepository.findAll().stream()
-                .map(this::mapToDto)
-                .toList();
+        return atrasoRepository.findAllDtos();
     }
 
     @Override
@@ -87,4 +85,4 @@ public class AtrasoServiceImpl implements IAtrasoService {
         return value == null ? "" : value.trim();
     }
 
-}}
+}

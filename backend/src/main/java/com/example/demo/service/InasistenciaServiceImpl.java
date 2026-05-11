@@ -9,6 +9,7 @@ import com.example.demo.dto.InasistenciaDTO;
 import com.example.demo.entity.EstudianteEntity;
 import com.example.demo.entity.InasitenciaEntity;
 import com.example.demo.interfaces.IEstudianteService;
+import com.example.demo.interfaces.IInasistenciaService;
 import com.example.demo.repository.InasistenciaRepository;
 
 @Service
@@ -20,9 +21,12 @@ public class InasistenciaServiceImpl implements IInasistenciaService {
     private IEstudianteService estudianteService;
     @Override
     public List<InasistenciaDTO> getAllInasistencias() {
-        return inasistenciaRepository.findAll().stream()
-                .map(this::mapToDto)
-                .toList();
+        return inasistenciaRepository.findAllDtos();
+    }
+
+    @Override
+    public List<InasistenciaDTO> getInasistenciasByCursoId(Long cursoId) {
+        return inasistenciaRepository.findDtoByCursoId(cursoId);
     }
 
     @Override
@@ -54,16 +58,27 @@ public class InasistenciaServiceImpl implements IInasistenciaService {
         EstudianteEntity estudiante = inasistencia.getEstudiante();
         String nombreEstudiante = "";
         String apellidoEstudiante = "";
+        Long estudianteId = null;
+        Long cursoId = null;
+        String nombreCurso = "";
 
         if (estudiante != null) {
+            estudianteId = estudiante.getId();
             nombreEstudiante = concatParts(estudiante.getNombre1(), estudiante.getNombre2());
             apellidoEstudiante = concatParts(estudiante.getApellido1(), estudiante.getApellido2());
+            if (estudiante.getCurso() != null) {
+                cursoId = estudiante.getCurso().getId();
+                nombreCurso = estudiante.getCurso().getNombreCurso();
+            }
         }
 
         return new InasistenciaDTO(
                 inasistencia.getId(),
                 inasistencia.getFecha(),
                 inasistencia.getJustificada(),
+                estudianteId,
+                cursoId,
+                nombreCurso,
                 nombreEstudiante,
                 apellidoEstudiante
         );

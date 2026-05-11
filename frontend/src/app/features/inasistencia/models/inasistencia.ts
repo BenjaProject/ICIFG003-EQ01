@@ -1,7 +1,10 @@
 export interface Inasistencia{
-    idInasistencia: number,
-    fecha: Date,
+    id: number,
+    fecha: string,
     justificada: boolean,
+    estudianteId: number | null,
+    cursoId: number | null,
+    nombreCurso: string,
     nombreEstudiante: string,
     apellidoEstudiante: string
 }

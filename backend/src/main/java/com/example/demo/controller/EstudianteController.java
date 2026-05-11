@@ -30,7 +30,7 @@ public class EstudianteController {
 		try {
 			return ResponseEntity.ok(service.findAll());
 		} catch (Exception e) {
-			return ResponseEntity.status(404).body(e);
+			return ResponseEntity.status(404).body(e.getMessage());
 		}
 	}
 
@@ -39,7 +39,7 @@ public class EstudianteController {
 		try {
 			return ResponseEntity.ok(service.findByCursoId(cursoId));
 		} catch (Exception e) {
-			return ResponseEntity.status(404).body(e);
+			return ResponseEntity.status(404).body(e.getMessage());
 		}
 	}
 	
@@ -49,7 +49,7 @@ public class EstudianteController {
 			EstudianteEntity nuevoEstudiante = service.save(estudianteEntity);
 			return ResponseEntity.ok().body(nuevoEstudiante);
 		} catch (Exception e) {
-			return ResponseEntity.status(404).body(e);
+			return ResponseEntity.status(404).body(e.getMessage());
 		}
 	}
 	
@@ -72,7 +72,7 @@ public class EstudianteController {
 				return ResponseEntity.ok(actualizado);
 			}
 		} catch (Exception e) {
-			return ResponseEntity.status(404).body(e);
+			return ResponseEntity.status(404).body(e.getMessage());
 		}
 	}
 	

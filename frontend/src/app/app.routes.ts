@@ -4,6 +4,7 @@ import { LandingComponent } from './features/users/components/landing-component/
 import { LoginComponent } from './features/users/components/login-component/login-component';
 import { DashboardComponent } from './features/users/components/dashboard-component/dashboard-component';
 import { EstudiantePageComponent } from './features/estudiantes/pages/estudiante-page.component';
+import { InasistenciaPageComponent } from './features/inasistencia/pages/inasistencia-page.component';
 import { CursoPageComponent } from './features/cursos/pages/curso-page.component';
 import { UsuarioStore } from './features/users/services/usuario-store';
 
@@ -25,5 +26,6 @@ export const routes: Routes = [
     {path:'registro', component: LoginComponent},
     {path:'dashboard', component: DashboardComponent, canActivate: [authGuard]},
     {path:'estudiantes', component: EstudiantePageComponent, canActivate: [authGuard]},
+    {path:'inasistencias', component: InasistenciaPageComponent, canActivate: [authGuard]},
     {path:'cursos', component: CursoPageComponent, canActivate: [authGuard]}
 ];

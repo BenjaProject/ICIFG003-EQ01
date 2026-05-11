@@ -27,7 +27,7 @@ public class CursoController {
         try {
             return ResponseEntity.ok(cursoService.getAllCursos());
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(e);
+            return ResponseEntity.status(404).body(e.getMessage());
         }
     }
 
@@ -36,7 +36,7 @@ public class CursoController {
         try {
             return ResponseEntity.ok(cursoService.createCurso(curso));
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(e);
+            return ResponseEntity.status(404).body(e.getMessage());
         }
     }
 
@@ -51,7 +51,7 @@ public class CursoController {
             return ResponseEntity.ok(cursoService.createCurso(existingCurso));
             
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(e);
+            return ResponseEntity.status(404).body(e.getMessage());
         }
     }
     @DeleteMapping("/{id}")
@@ -64,7 +64,7 @@ public class CursoController {
             cursoService.deleteCurso(id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(e);
+            return ResponseEntity.status(404).body(e.getMessage());
         }
     }
 }
