@@ -36,6 +36,11 @@ export class InasistenciaPageComponent implements OnInit {
     });
   });
 
+  cursoNombre = computed(() => {
+    const inasistencias = this.inasistencias();
+    return inasistencias.length > 0 ? inasistencias[0].nombreCurso : 'Curso';
+  });
+
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
       const cursoIdParam = params.get('cursoId');
