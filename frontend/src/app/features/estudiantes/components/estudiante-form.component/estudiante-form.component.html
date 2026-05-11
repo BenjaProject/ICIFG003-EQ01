@@ -2,30 +2,47 @@
   <div class="row g-3">
     <div class="col-md-6">
       <label class="form-label">Primer Nombre</label>
-      <input type="text" formControlName="nombre1" class="form-control">
+      <input type="text" formControlName="nombre1" class="form-control"
+             [class.is-invalid]="form.get('nombre1')?.invalid && form.get('nombre1')?.touched">
+      <div class="invalid-feedback">Solo se permiten letras y espacios.</div>
     </div>
+
     <div class="col-md-6">
       <label class="form-label">Segundo Nombre</label>
-      <input type="text" formControlName="nombre2" class="form-control">
+      <input type="text" formControlName="nombre2" class="form-control"
+             [class.is-invalid]="form.get('nombre2')?.invalid && form.get('nombre2')?.touched">
     </div>
 
     <div class="col-md-6">
       <label class="form-label">Apellido Paterno</label>
-      <input type="text" formControlName="apellido1" class="form-control">
+      <input type="text" formControlName="apellido1" class="form-control"
+             [class.is-invalid]="form.get('apellido1')?.invalid && form.get('apellido1')?.touched">
     </div>
+
     <div class="col-md-6">
       <label class="form-label">Apellido Materno</label>
-      <input type="text" formControlName="apellido2" class="form-control">
+      <input type="text" formControlName="apellido2" class="form-control"
+             [class.is-invalid]="form.get('apellido2')?.invalid && form.get('apellido2')?.touched">
     </div>
 
     <div class="col-12">
       <label class="form-label">RUN</label>
-      <input type="text" formControlName="run" class="form-control" placeholder="12.345.678-9">
+      <input type="text" formControlName="run" class="form-control" placeholder="12.345.678-9"
+             [class.is-invalid]="form.get('run')?.invalid && form.get('run')?.touched">
+      
+      <div class="invalid-feedback">
+        @if (form.get('run')?.errors?.['runInUse']) {
+          <span>Este RUN ya está en uso por otro estudiante.</span>
+        } @else {
+          <span>El RUN es obligatorio.</span>
+        }
+      </div>
     </div>
 
     <div class="col-12">
       <label class="form-label">Curso</label>
-      <select formControlName="idCurso" class="form-select">
+      <select formControlName="idCurso" class="form-select"
+              [class.is-invalid]="form.get('idCurso')?.invalid && form.get('idCurso')?.touched">
         <option [ngValue]="null" disabled>Seleccione un curso</option>
         @for (curso of cursoStore.cursos(); track curso.idCurso) {
           <option [ngValue]="curso.idCurso">{{ curso.nombreCurso }}</option>
@@ -37,6 +54,9 @@
   <div class="d-grid mt-4">
     <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
       Registrar Estudiante
+    </button>
+    <button type="button" class="btn btn-link mt-2" (click)="cancelar()" *ngIf="form.get('idEstudiante')?.value !== 0">
+      Cancelar Edición
     </button>
   </div>
 </form>
