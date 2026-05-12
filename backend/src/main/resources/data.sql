@@ -12,6 +12,8 @@ VALUES
   ('Curso 3A'),
   ('Curso 4A'),
   ('Curso 5A');
+  
+INSERT INTO usuario_entity(username, password) values ('test','test');
 
 INSERT INTO estudiante (nombre1, nombre2, apellido1, apellido2, run, id_curso)
 VALUES
