@@ -22,14 +22,16 @@ export class EstudianteListComponent {
 
   // Guardamos el cursoId actual para refrescar la lista después
   private currentCursoId: number | null = null;
-  attendanceDate = this.getToday();
-  attendanceStatus: Record<number, 'present' | 'absent'> = {};
+  attendanceDate = signal(this.getToday());
+  attendanceStatus = signal<Record<number, 'present' | 'absent'>>({});
+  private attendanceRecordsByStudent: Record<number, number> = {};
+  private absentIdsForDate = new Set<number>();
   attendanceError = signal<string | null>(null);
   sendingAttendance = signal(false);
   savedAttendance = signal(false);
 //  savedStatus = signal<Record<number, 'present' | 'absent'>>({});
   private readonly attendanceEffect = effect(() => {
-    this.ensureAttendanceDefaults();
+    this.applyAttendanceForDate();
   });
 
   ngOnInit(){
@@ -37,6 +39,7 @@ export class EstudianteListComponent {
       const cursoIdParam = params.get('cursoId');
       this.currentCursoId = cursoIdParam ? Number(cursoIdParam) : null;
       this.refreshList();
+      this.loadAttendanceForDate();
     });
   }
 
@@ -52,22 +55,38 @@ export class EstudianteListComponent {
   sendAttendance(): void {
     const ausentes = this.store
       .estudiantes()
-      .filter(estudiante => this.attendanceStatus[estudiante.idEstudiante] === 'absent')
+      .filter(estudiante => this.attendanceStatus()[estudiante.idEstudiante] === 'absent')
       .map(estudiante => estudiante.idEstudiante);
+
+    const existingAbsentIds = new Set(
+      Object.keys(this.attendanceRecordsByStudent).map(id => Number(id))
+    );
+    const currentAbsentIds = new Set(ausentes);
+    const toAdd = ausentes.filter(id => !existingAbsentIds.has(id));
+    const toDelete = Array.from(existingAbsentIds).filter(id => !currentAbsentIds.has(id));
+
+    const requests = [
+      ...toAdd.map(id => this.inasistenciaService.agregar(id, this.attendanceDate())),
+      ...toDelete.map(id => this.inasistenciaService.quitar(this.attendanceRecordsByStudent[id]))
+    ];
 
     this.attendanceError.set(null);
     this.sendingAttendance.set(true);
-    if (ausentes.length === 0) {
+
+    if (requests.length === 0) {
+      this.finishSending();
+      this.savedAttendance.set(true);
       setTimeout(() => {
-        this.finishSending();
-      }, 400);
+        this.savedAttendance.set(false);
+      }, 2000);
       return;
-    
     }
-    forkJoin(ausentes.map(id => this.inasistenciaService.agregar(id, this.attendanceDate))).subscribe({
+
+    forkJoin(requests).subscribe({
       next: () => {
         this.finishSending();
         this.refreshList();
+        this.loadAttendanceForDate();
         this.savedAttendance.set(true);
         setTimeout(() => {
           this.savedAttendance.set(false);
@@ -109,18 +128,29 @@ export class EstudianteListComponent {
 
   private ensureAttendanceDefaults(): void {
     for (const estudiante of this.store.estudiantes()) {
-      if (!this.attendanceStatus[estudiante.idEstudiante]) {
-        this.attendanceStatus[estudiante.idEstudiante] = 'present';
+      if (!this.attendanceStatus()[estudiante.idEstudiante]) {
+        this.attendanceStatus.update(current => ({
+          ...current,
+          [estudiante.idEstudiante]: 'present'
+        }));
       }
     }
   }
 
   isAttendanceSelected(estudianteId: number, status: 'present' | 'absent'): boolean {
-    return this.attendanceStatus[estudianteId] === status;
+    return this.attendanceStatus()[estudianteId] === status;
   }
 
   setAttendanceStatus(estudianteId: number, status: 'present' | 'absent'): void {
-    this.attendanceStatus[estudianteId] = status;
+    this.attendanceStatus.update(current => ({
+      ...current,
+      [estudianteId]: status
+    }));
+  }
+
+  onAttendanceDateChange(value: string): void {
+    this.attendanceDate.set(value);
+    this.loadAttendanceForDate();
   }
 
   private finishSending(): void {
@@ -129,5 +159,51 @@ export class EstudianteListComponent {
 
   private getToday(): string {
     return new Date().toISOString().split('T')[0];
+  }
+
+  private loadAttendanceForDate(): void {
+    this.attendanceRecordsByStudent = {};
+    this.absentIdsForDate = new Set<number>();
+    this.applyAttendanceForDate();
+    if (!this.attendanceDate()) {
+      return;
+    }
+
+    const request$ = this.currentCursoId && !Number.isNaN(this.currentCursoId)
+      ? this.inasistenciaService.getByCurso(this.currentCursoId)
+      : this.inasistenciaService.getAll();
+
+    request$.subscribe({
+      next: data => {
+        const fecha = this.attendanceDate();
+        for (const item of data ?? []) {
+          if (item.fecha === fecha && item.estudianteId != null) {
+            this.attendanceRecordsByStudent[item.estudianteId] = item.id;
+            this.absentIdsForDate.add(item.estudianteId);
+          }
+        }
+        this.applyAttendanceForDate();
+      },
+      error: () => {
+        this.attendanceError.set('Error al cargar asistencia del dia');
+        this.applyAttendanceForDate();
+      }
+    });
+  }
+
+  private applyAttendanceForDate(): void {
+    const nextStatus: Record<number, 'present' | 'absent'> = {};
+    const estudiantes = this.store.estudiantes();
+    for (const estudiante of estudiantes) {
+      nextStatus[estudiante.idEstudiante] = 'present';
+    }
+
+    for (const estudianteId of this.absentIdsForDate) {
+      if (nextStatus[estudianteId]) {
+        nextStatus[estudianteId] = 'absent';
+      }
+    }
+
+    this.attendanceStatus.set(nextStatus);
   }
 }

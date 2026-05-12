@@ -5,7 +5,8 @@
             id="attendance-date"
             type="date"
             class="form-control form-control-sm"
-            [(ngModel)]="attendanceDate"
+            [ngModel]="attendanceDate()"
+            (ngModelChange)="onAttendanceDateChange($event)"
         />
     </div>
     <div class="d-flex align-items-center gap-2">
