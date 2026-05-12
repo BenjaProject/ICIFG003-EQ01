@@ -23,6 +23,7 @@ export class InasistenciaPageComponent implements OnInit {
   searchTerm = signal('');
   loading = signal(false);
   error = signal<string | null>(null);
+  updatingIds = signal<Set<number>>(new Set());
   cursoId = signal<number | null>(null);
 
   filteredInasistencias = computed(() => {
@@ -59,6 +60,26 @@ export class InasistenciaPageComponent implements OnInit {
     this.searchTerm.set(value);
   }
 
+  toggleJustificada(item: Inasistencia): void {
+    if (!item?.id) {
+      return;
+    }
+    const next = !item.justificada;
+    this.setUpdating(item.id, true);
+    this.inasistenciaService.actualizar(item.id, { fecha: item.fecha, justificada: next }).subscribe({
+      next: () => {
+        this.inasistencias.update(list =>
+          list.map(current => current.id === item.id ? { ...current, justificada: next } : current)
+        );
+        this.setUpdating(item.id, false);
+      },
+      error: () => {
+        this.error.set('Error al actualizar justificacion');
+        this.setUpdating(item.id, false);
+      }
+    });
+  }
+
   private loadInasistencias(): void {
     this.loading.set(true);
     this.error.set(null);
@@ -77,6 +98,18 @@ export class InasistenciaPageComponent implements OnInit {
         this.error.set('Error al cargar inasistencias');
         this.loading.set(false);
       }
+    });
+  }
+
+  private setUpdating(id: number, updating: boolean): void {
+    this.updatingIds.update(current => {
+      const next = new Set(current);
+      if (updating) {
+        next.add(id);
+      } else {
+        next.delete(id);
+      }
+      return next;
     });
   }
 }

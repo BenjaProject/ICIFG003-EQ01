@@ -11,10 +11,16 @@
       <div class="collapse navbar-collapse" id="navbarInasistencias">
         <ul class="navbar-nav mx-auto">
           <li class="nav-item">
-            <a class="nav-link" routerLink="/dashboard">Menu Principal</a>
+            <a class="nav-link" routerLink="/dashboard">Dashboard</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/estudiantes">Estudiantes</a>
+            <a
+              class="nav-link"
+              routerLink="/estudiantes"
+              [queryParams]="cursoId() ? { cursoId: cursoId() } : null"
+            >
+              Estudiantes
+            </a>
           </li>
         </ul>
         <div class="d-flex align-items-center gap-3">
@@ -92,9 +98,19 @@
                   <td>{{ item.nombreCurso || 'Sin curso' }}</td>
                   <td>{{ item.fecha }}</td>
                   <td>
-                    <span class="badge" [class.bg-success]="item.justificada" [class.bg-danger]="!item.justificada">
-                      {{ item.justificada ? 'Si' : 'No' }}
-                    </span>
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="badge" [class.bg-success]="item.justificada" [class.bg-danger]="!item.justificada">
+                        {{ item.justificada ? 'Si' : 'No' }}
+                      </span>
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-sm"
+                        [disabled]="updatingIds().has(item.id)"
+                        (click)="toggleJustificada(item)"
+                      >
+                        {{ item.justificada ? 'Quitar' : 'Justificar' }}
+                      </button>
+                    </div>
                   </td>
                 </tr>
               }

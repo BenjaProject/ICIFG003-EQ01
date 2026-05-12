@@ -57,7 +57,14 @@ export class EstudianteStore{
     addEstudiante(est: Estudiante){
         this.error.set(null);
         this.estService.create(est).subscribe({
-            next: e => this.estudiantes.update(list => [...list, e]),
+            next: e => {
+                const normalized = {
+                    ...e,
+                    cantidadAtrasos: e.cantidadAtrasos ?? 0,
+                    cantidadInasistencias: e.cantidadInasistencias ?? 0,
+                };
+                this.estudiantes.update(list => [...list, normalized]);
+            },
             error: err => {
                 const message = err?.error?.message ?? err?.error ?? 'Error al agregar estudiante';
                 this.error.set(message);

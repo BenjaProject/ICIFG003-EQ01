@@ -27,4 +27,8 @@ export class InasistenciaService {
         return this.http.delete(`${environmentInasistencias.apiUrl}/${id}`);
     }
 
+    actualizar(id: number, payload: { fecha: string; justificada: boolean }) {
+        return this.http.put(`${environmentInasistencias.apiUrl}/${id}`, payload);
+    }
+
 }
