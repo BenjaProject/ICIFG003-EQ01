@@ -91,7 +91,6 @@ export class EstudianteListComponent {
         setTimeout(() => {
           this.savedAttendance.set(false);
         }, 2000);
-//        this.savedStatus.set({ ...this.attendanceStatus });
       },
       error: () => {
         this.finishSending();
