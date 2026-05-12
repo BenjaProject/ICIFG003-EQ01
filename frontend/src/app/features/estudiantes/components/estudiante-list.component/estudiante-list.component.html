@@ -25,6 +25,13 @@
     <div class="text-danger small mb-2">{{ attendanceError() }}</div>
 }
 
+@if (savedAttendance()){
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        Asistencia guardada exitosamente.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 <table class="table table-hover table-striped">
     <thead class="table-light">
         <tr>

@@ -26,6 +26,8 @@ export class EstudianteListComponent {
   attendanceStatus: Record<number, 'present' | 'absent'> = {};
   attendanceError = signal<string | null>(null);
   sendingAttendance = signal(false);
+  savedAttendance = signal(false);
+//  savedStatus = signal<Record<number, 'present' | 'absent'>>({});
   private readonly attendanceEffect = effect(() => {
     this.ensureAttendanceDefaults();
   });
@@ -60,11 +62,17 @@ export class EstudianteListComponent {
         this.finishSending();
       }, 400);
       return;
+    
     }
     forkJoin(ausentes.map(id => this.inasistenciaService.agregar(id, this.attendanceDate))).subscribe({
       next: () => {
         this.finishSending();
         this.refreshList();
+        this.savedAttendance.set(true);
+        setTimeout(() => {
+          this.savedAttendance.set(false);
+        }, 2000);
+//        this.savedStatus.set({ ...this.attendanceStatus });
       },
       error: () => {
         this.finishSending();
