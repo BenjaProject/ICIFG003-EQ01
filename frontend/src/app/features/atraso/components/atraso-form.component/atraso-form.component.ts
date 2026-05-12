@@ -52,7 +52,19 @@ export class AtrasoFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._estStore.loadEstudiantes();
+    this.route.queryParamMap.subscribe(params => {
+      const cursoIdParam = params.get('cursoId');
+      if (cursoIdParam) {
+        this._estStore.loadEstudiantesByCurso(Number(cursoIdParam));
+      } else {
+        this._estStore.loadEstudiantes();
+      }
+
+      const estudianteIdParam = params.get('estudianteId');
+      if (estudianteIdParam && this.form.get('id')?.value === 0) {
+        this.form.patchValue({ estudianteId: Number(estudianteIdParam) });
+      }
+    });
 
     if (this.form.get('id')?.value === 0) {
       this.form.patchValue({
@@ -60,13 +72,6 @@ export class AtrasoFormComponent implements OnInit {
         hora: new Date().toTimeString().split(' ')[0].substring(0, 5)
       });
     }
-
-    this.route.queryParamMap.subscribe(params => {
-      const estudianteIdParam = params.get('estudianteId');
-      if (estudianteIdParam && this.form.get('id')?.value === 0) {
-        this.form.patchValue({ estudianteId: Number(estudianteIdParam) });
-      }
-    });
   }
 
   guardar() {

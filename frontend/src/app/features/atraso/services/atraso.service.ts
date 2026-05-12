@@ -17,6 +17,10 @@ export class AtrasoService {
         return this.http.get<Atraso[]>(`${this.apiUrl}/estudiante/${estudianteId}`);
     }
 
+    getByCurso(cursoId: number): Observable<Atraso[]> {
+        return this.http.get<Atraso[]>(`${this.apiUrl}/curso/${cursoId}`);
+    }
+
     create(estudianteId: number, atraso: Partial<Atraso>): Observable<Atraso> {
         return this.http.post<Atraso>(`${this.apiUrl}/${estudianteId}`, atraso);
     }

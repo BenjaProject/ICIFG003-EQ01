@@ -30,6 +30,11 @@ public class AtrasoServiceImpl implements IAtrasoService {
     }
 
     @Override
+    public List<AtrasoDTO> getAtrasosByCursoId(Long cursoId) {
+        return atrasoRepository.findDtosByCursoId(cursoId);
+    }
+
+    @Override
     public AtrasoEntity getAtrasoById(Long id) {
         return atrasoRepository.findById(id).orElse(null);
     }

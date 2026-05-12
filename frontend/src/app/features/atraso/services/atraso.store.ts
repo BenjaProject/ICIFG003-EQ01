@@ -12,11 +12,13 @@ export class AtrasoStore{
     error = signal<string | null>(null);
     selectedAtraso = signal<Atraso | null>(null);
     currentEstudianteId = signal<number | null>(null);
+    currentCursoId = signal<number | null>(null);
 
     loadAtrasos(){
         this.loading.set(true);
         this.error.set(null);
         this.currentEstudianteId.set(null);
+        this.currentCursoId.set(null);
         this.atrasoService.getAll().subscribe({
             next: data =>{
                 this.atrasos.set(data);
@@ -34,6 +36,7 @@ export class AtrasoStore{
         this.loading.set(true);
         this.error.set(null);
         this.currentEstudianteId.set(estudianteId);
+        this.currentCursoId.set(null);
         this.atrasoService.getByEstudiante(estudianteId).subscribe({
             next: data =>{
                 this.atrasos.set(data);
@@ -41,6 +44,24 @@ export class AtrasoStore{
             },
             error: (err) =>{
                 const message = err?.error?.message ?? err?.error ?? 'Error al cargar atrasos por estudiante';
+                this.error.set(message);
+                this.loading.set(false);
+            }
+        })
+    }
+
+    loadAtrasosByCurso(cursoId: number){
+        this.loading.set(true);
+        this.error.set(null);
+        this.currentEstudianteId.set(null);
+        this.currentCursoId.set(cursoId);
+        this.atrasoService.getByCurso(cursoId).subscribe({
+            next: data =>{
+                this.atrasos.set(data);
+                this.loading.set(false);
+            },
+            error: (err) =>{
+                const message = err?.error?.message ?? err?.error ?? 'Error al cargar atrasos por curso';
                 this.error.set(message);
                 this.loading.set(false);
             }
@@ -60,8 +81,11 @@ export class AtrasoStore{
         this.atrasoService.create(estudianteId, atraso).subscribe({
             next: () => {
                 const estId = this.currentEstudianteId();
+                const cursoId = this.currentCursoId();
                 if (estId) {
                     this.loadAtrasosByEstudiante(estId);
+                } else if (cursoId) {
+                    this.loadAtrasosByCurso(cursoId);
                 } else {
                     this.loadAtrasos();
                 }
@@ -79,8 +103,11 @@ export class AtrasoStore{
         this.atrasoService.update(atraso.id, atraso).subscribe({
             next: () => {
                 const estId = this.currentEstudianteId();
+                const cursoId = this.currentCursoId();
                 if (estId) {
                     this.loadAtrasosByEstudiante(estId);
+                } else if (cursoId) {
+                    this.loadAtrasosByCurso(cursoId);
                 } else {
                     this.loadAtrasos();
                 }
@@ -98,8 +125,11 @@ export class AtrasoStore{
         this.atrasoService.delete(id).subscribe({
             next: () => {
                 const estId = this.currentEstudianteId();
+                const cursoId = this.currentCursoId();
                 if (estId) {
                     this.loadAtrasosByEstudiante(estId);
+                } else if (cursoId) {
+                    this.loadAtrasosByCurso(cursoId);
                 } else {
                     this.loadAtrasos();
                 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EstudianteStore } from '@features/estudiantes/services/estudiante.store';
@@ -19,14 +19,13 @@ export class EstudianteListComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private inasistenciaService = inject(InasistenciaService);
-  private cdr = inject(ChangeDetectorRef);
 
   // Guardamos el cursoId actual para refrescar la lista después
   private currentCursoId: number | null = null;
   attendanceDate = this.getToday();
   attendanceStatus: Record<number, 'present' | 'absent'> = {};
-  attendanceError: string | null = null;
-  sendingAttendance = false;
+  attendanceError = signal<string | null>(null);
+  sendingAttendance = signal(false);
   private readonly attendanceEffect = effect(() => {
     this.ensureAttendanceDefaults();
   });
@@ -54,8 +53,8 @@ export class EstudianteListComponent {
       .filter(estudiante => this.attendanceStatus[estudiante.idEstudiante] === 'absent')
       .map(estudiante => estudiante.idEstudiante);
 
-    this.attendanceError = null;
-    this.sendingAttendance = true;
+    this.attendanceError.set(null);
+    this.sendingAttendance.set(true);
     if (ausentes.length === 0) {
       setTimeout(() => {
         this.finishSending();
@@ -69,7 +68,7 @@ export class EstudianteListComponent {
       },
       error: () => {
         this.finishSending();
-        this.attendanceError = 'Error al enviar asistencia';
+        this.attendanceError.set('Error al enviar asistencia');
       }
     });
   }
@@ -93,6 +92,10 @@ export class EstudianteListComponent {
   }
 
   goToAtrasos(): void {
+    if (this.currentCursoId && !Number.isNaN(this.currentCursoId)) {
+      this.router.navigate(['/atrasos'], { queryParams: { cursoId: this.currentCursoId } });
+      return;
+    }
     this.router.navigate(['/atrasos']);
   }
 
@@ -113,8 +116,7 @@ export class EstudianteListComponent {
   }
 
   private finishSending(): void {
-    this.sendingAttendance = false;
-    this.cdr.markForCheck();
+    this.sendingAttendance.set(false);
   }
 
   private getToday(): string {

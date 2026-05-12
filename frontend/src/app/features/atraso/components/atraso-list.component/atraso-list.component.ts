@@ -18,8 +18,11 @@ export class AtrasoListComponent implements OnInit {
   ngOnInit() {
     this.route.queryParamMap.subscribe(params => {
       const estudianteIdParam = params.get('estudianteId');
+      const cursoIdParam = params.get('cursoId');
       if (estudianteIdParam) {
         this.store.loadAtrasosByEstudiante(Number(estudianteIdParam));
+      } else if (cursoIdParam) {
+        this.store.loadAtrasosByCurso(Number(cursoIdParam));
       } else {
         this.store.loadAtrasos();
       }
