@@ -14,7 +14,13 @@
             <a class="nav-link" routerLink="/">Menú Principal</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/estudiantes">Estudiantes</a>
+            <a
+              class="nav-link"
+              routerLink="/estudiantes"
+              [queryParams]="cursoId() ? { cursoId: cursoId() } : null"
+            >
+              Estudiantes
+            </a>
           </li>
         </ul>
         <div class="d-flex align-items-center gap-3">
