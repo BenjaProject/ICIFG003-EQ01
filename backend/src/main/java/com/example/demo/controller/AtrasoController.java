@@ -32,6 +32,15 @@ public class AtrasoController {
         }
     }
 
+    @GetMapping("/estudiante/{estudianteId}")
+    public ResponseEntity<?> getAtrasosByEstudiante(@PathVariable Long estudianteId) {
+        try {
+            return ResponseEntity.ok(atrasoService.getAtrasosByEstudianteId(estudianteId));
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getAtrasoById(@PathVariable Long id) {
         try {

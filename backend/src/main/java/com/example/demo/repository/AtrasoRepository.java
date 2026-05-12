@@ -8,6 +8,8 @@ import java.util.List;
 import com.example.demo.entity.AtrasoEntity;
 import com.example.demo.dto.AtrasoDTO;
 
+import org.springframework.data.repository.query.Param;
+
 @Repository
 public interface AtrasoRepository extends JpaRepository<AtrasoEntity, Long> {
 	@Query("""
@@ -23,4 +25,19 @@ public interface AtrasoRepository extends JpaRepository<AtrasoEntity, Long> {
 		left join a.estudiante e
 		""")
 	List<AtrasoDTO> findAllDtos();
+
+	@Query("""
+		select new com.example.demo.dto.AtrasoDTO(
+			a.id,
+			a.fecha,
+			a.hora,
+			a.razon,
+			concat(coalesce(e.nombre1, ''), case when e.nombre2 is null or e.nombre2 = '' then '' else concat(' ', e.nombre2) end),
+			concat(coalesce(e.apellido1, ''), case when e.apellido2 is null or e.apellido2 = '' then '' else concat(' ', e.apellido2) end)
+		)
+		from AtrasoEntity a
+		left join a.estudiante e
+		where e.id = :estudianteId
+		""")
+	List<AtrasoDTO> findDtosByEstudianteId(@Param("estudianteId") Long estudianteId);
 }

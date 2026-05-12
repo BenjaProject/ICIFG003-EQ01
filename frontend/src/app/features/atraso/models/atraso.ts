@@ -1,8 +1,8 @@
 export interface Atraso{
-    idAtraso: number,
+    id: number,
     fecha: Date,
     hora: string,
     razon: string,
-    nombreEstudiante: string,
-    apellidoEstudiante: string
+    nombreEstudiante?: string,
+    apellidoEstudiante?: string
 }

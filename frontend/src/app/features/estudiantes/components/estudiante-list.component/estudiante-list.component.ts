@@ -92,6 +92,10 @@ export class EstudianteListComponent {
     this.router.navigate(['/inasistencias']);
   }
 
+  goToAtrasos(): void {
+    this.router.navigate(['/atrasos']);
+  }
+
   private ensureAttendanceDefaults(): void {
     for (const estudiante of this.store.estudiantes()) {
       if (!this.attendanceStatus[estudiante.idEstudiante]) {

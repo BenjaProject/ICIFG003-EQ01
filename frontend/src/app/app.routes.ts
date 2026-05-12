@@ -8,6 +8,8 @@ import { InasistenciaPageComponent } from './features/inasistencia/pages/inasist
 import { CursoPageComponent } from './features/cursos/pages/curso-page.component';
 import { UsuarioStore } from './features/users/services/usuario-store';
 
+import { AtrasoPageComponent } from './features/atraso/pages/atraso-page.component';
+
 const authGuard = () => {
     const usuarioStore = inject(UsuarioStore);
     const router = inject(Router);
@@ -27,5 +29,6 @@ export const routes: Routes = [
     {path:'dashboard', component: DashboardComponent, canActivate: [authGuard]},
     {path:'estudiantes', component: EstudiantePageComponent, canActivate: [authGuard]},
     {path:'inasistencias', component: InasistenciaPageComponent, canActivate: [authGuard]},
-    {path:'cursos', component: CursoPageComponent, canActivate: [authGuard]}
+    {path:'cursos', component: CursoPageComponent, canActivate: [authGuard]},
+    {path:'atrasos', component: AtrasoPageComponent, canActivate: [authGuard]}
 ];

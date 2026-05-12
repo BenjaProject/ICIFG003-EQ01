@@ -1,0 +1,17 @@
+.text-yellow {
+  color: #ffc107;
+}
+
+.text-navy {
+  color: #0d233a;
+}
+
+.btn-yellow {
+  background-color: #ffc107;
+  color: #000;
+  font-weight: 500;
+}
+
+.navbar {
+  background-color: #0d233a;
+}
